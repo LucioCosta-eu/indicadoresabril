@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Projetistas Terceiros</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        input, select, button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e2f1ff;
+        }
+
+        .status-em-andamento {
+            background-color: #fff9c4;
+        }
+
+        .status-atrasado {
+            background-color: #ffcdd2;
+        }
+
+        .status-concluido {
+            background-color: #c8e6c9;
+        }
+
+        .status-nao-iniciado {
+            background-color: #e0e0e0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .close-button:hover {
+            background-color: #c0392b;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 900;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #555;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            height: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-size: 12px;
+            transition: width 0.3s;
+        }
+
+        .export-options {
+            margin-left: 10px;
+        }
+        
+        .badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .priority-alta {
+            background-color: #ff7675;
+            color: white;
+        }
+        
+        .priority-media {
+            background-color: #fdcb6e;
+            color: #333;
+        }
+        
+        .priority-baixa {
+            background-color: #55efc4;
+            color: #333;
+        }
+
+        .observacoes-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Controle de Projetistas Terceiros</h1>
+        
+        <div class="controls">
+            <div class="search-filter">
+                <input type="text" id="search" placeholder="Buscar...">
+                <select id="filter-status">
+                    <option value="">Todos os status</option>
+                    <option value="Não iniciado">Não iniciado</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Atrasado">Atrasado</option>
+                    <option value="Concluído">Concluído</option>
+                </select>
+                <select id="filter-projetista">
+                    <option value="">Todos os projetistas</option>
+                    <option value="Cleiton">Cleiton</option>
+                    <option value="Augusto">Augusto</option>
+                    <option value="Timtim">Timtim</option>
+                </select>
+                <button id="filter-btn">Filtrar</button>
+            </div>
+            <div>
+                <button id="add-projeto-btn">Adicionar Projeto</button>
+                <div class="export-options">
+                    <button id="export-excel">Exportar Excel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard com gráficos -->
+        <div class="dashboard" style="margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 20px;">
+            <div class="chart-container" style="flex: 1; min-width: 300px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; border-radius: 5px; background-color: white;">
+                <h3>Status dos Projetos</h3>
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="chart-container" style="flex: 1; min-width: 300px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; border-radius: 5px; background-color: white;">
+                <h3>Projetos por Projetista</h3>
+                <canvas id="projetistaChart"></canvas>
+            </div>
+            <div class="chart-container" style="flex: 1; min-width: 300px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; border-radius: 5px; background-color: white;">
+                <h3>Progresso Médio por Especialidade</h3>
+                <canvas id="especialidadeChart"></canvas>
+            </div>
+        </div>
+        
+        <table id="tabela-projetos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Projeto</th>
+                    <th>Projetista</th>
+                    <th>Especialidade</th>
+                    <th>Etapa Atual</th>
+                    <th>Progresso</th>
+                    <th>Data Início</th>
+                    <th>Previsão Entrega</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="status-em-andamento">
+                    <td>001</td>
+                    <td>Residencial Vila Nova</td>
+                    <td>Cleiton</td>
+                    <td>SACADA</td>
+                    <td>Execução de Proj.</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 65%; background-color: #3498db;">65%</div>
+                        </div>
+                    </td>
+                    <td>01/03/2025</td>
+                    <td>15/04/2025</td>
+                    <td><span class="badge priority-alta">Alta</span></td>
+                    <td>Em andamento</td>
+                    <td class="observacoes-cell">Reunião com cliente marcada para 05/04/2025</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn">Editar</button>
+                        <button class="delete-btn">Excluir</button>
+                    </td>
+                </tr>
+                <tr class="status-atrasado">
+                    <td>002</td>
+                    <td>Edifício Comercial Centro</td>
+                    <td>Augusto</td>
+                    <td>SACADA + CAIXA DE AR</td>
+                    <td>Medição</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 40%; background-color: #e74c3c;">40%</div>
+                        </div>
+                    </td>
+                    <td>15/02/2025</td>
+                    <td>10/03/2025</td>
+                    <td><span class="badge priority-media">Média</span></td>
+                    <td>Atrasado</td>
+                    <td class="observacoes-cell">Aguardando aprovação da prefeitura</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn">Editar</button>
+                        <button class="delete-btn">Excluir</button>
+                    </td>
+                </tr>
+                <tr class="status-concluido">
+                    <td>003</td>
+                    <td>Condomínio Parque das Árvores</td>
+                    <td>Timtim</td>
+                    <td>GUARDA-CORPO</td>
+                    <td>Aprovado</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 100%; background-color: #27ae60;">100%</div>
+                        </div>
+                    </td>
+                    <td>01/01/2025</td>
+                    <td>28/02/2025</td>
+                    <td><span class="badge priority-baixa">Baixa</span></td>
+                    <td>Concluído</td>
+                    <td class="observacoes-cell">Projeto entregue e aprovado pelo cliente</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn">Editar</button>
+                        <button class="delete-btn">Excluir</button>
+                    </td>
+                </tr>
+                <tr class="status-nao-iniciado">
+                    <td>004</td>
+                    <td>Shopping Plaza Central</td>
+                    <td>Cleiton</td>
+                    <td>ESQUADRIAS</td>
+                    <td>Agendamento</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 0%; background-color: #95a5a6;">0%</div>
+                        </div>
+                    </td>
+                    <td>10/04/2025</td>
+                    <td>30/05/2025</td>
+                    <td><span class="badge priority-alta">Alta</span></td>
+                    <td>Não iniciado</td>
+                    <td class="observacoes-cell">Aguardando levantamento topográfico</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn">Editar</button>
+                        <button class="delete-btn">Excluir</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Overlay para o formulário -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Formulário para adicionar/editar projeto -->
+    <div class="form-container" id="projeto-form">
+        <div class="form-header">
+            <h2 id="form-title">Adicionar Novo Projeto</h2>
+            <button class="close-button" id="close-form">Fechar</button>
+        </div>
+        <form id="projeto-form-element">
+            <div class="form-group">
+                <label for="projeto-id">ID do Projeto:</label>
+                <input type="text" id="projeto-id" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-nome">Nome do Projeto:</label>
+                <input type="text" id="projeto-nome" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-projetista">Projetista:</label>
+                <select id="projeto-projetista" required>
+                    <option value="">Selecione um projetista</option>
+                    <option value="Cleiton">Cleiton</option>
+                    <option value="Augusto">Augusto</option>
+                    <option value="Timtim">Timtim</option>
+                    <option value="Novo Projetista">Adicionar novo projetista...</option>
+                </select>
+            </div>
+            <div class="form-group" id="novo-projetista-container" style="display: none;">
+                <label for="novo-projetista">Nome do Novo Projetista:</label>
+                <input type="text" id="novo-projetista">
+            </div>
+            <div class="form-group">
+                <label for="projeto-especialidade">Especialidade:</label>
+                <select id="projeto-especialidade" required>
+                    <option value="">Selecione uma especialidade</option>
+                    <option value="SACADA">SACADA</option>
+                    <option value="SACADA + CAIXA DE AR">SACADA + CAIXA DE AR</option>
+                    <option value="GUARDA-CORPO">GUARDA-CORPO</option>
+                    <option value="ESQUADRIAS">ESQUADRIAS</option>
+                    <option value="PROJETOS ESPECIAIS">PROJETOS ESPECIAIS</option>
+                    <option value="OUTROS">OUTROS</option>
+                </select>
+            </div>
+            <div class="form-group" id="nova-especialidade-container" style="display: none;">
+                <label for="nova-especialidade">Nova Especialidade:</label>
+                <input type="text" id="nova-especialidade">
+            </div>
+            <div class="form-group">
+                <label for="projeto-etapa">Etapa Atual:</label>
+                <select id="projeto-etapa" required>
+                    <option value="">Selecione uma etapa</option>
+                    <option value="Agendamento">Agendamento</option>
+                    <option value="Medição">Medição</option>
+                    <option value="Execução de Proj.">Execução de Proj.</option>
+                    <option value="Detalhamento">Detalhamento</option>
+                    <option value="Em Análise">Em Análise</option>
+                    <option value="Aprovado">Aprovado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="projeto-progresso">Progresso (%):</label>
+                <input type="number" id="projeto-progresso" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-inicio">Data de Início:</label>
+                <input type="date" id="projeto-inicio" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-previsao">Previsão de Entrega:</label>
+                <input type="date" id="projeto-previsao" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-prioridade">Prioridade:</label>
+                <select id="projeto-prioridade" required>
+                    <option value="">Selecione a prioridade</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Média">Média</option>
+                    <option value="Baixa">Baixa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="projeto-status">Status:</label>
+                <select id="projeto-status" required>
+                    <option value="">Selecione o status</option>
+                    <option value="Não iniciado">Não iniciado</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Atrasado">Atrasado</option>
+                    <option value="Concluído">Concluído</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="projeto-observacoes">Observações:</label>
+                <textarea id="projeto-observacoes" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="cancel-form">Cancelar</button>
+                <button type="submit" id="save-form">Salvar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Funcionamento básico do formulário e controles
+        document.addEventListener('DOMContentLoaded', function() {
+            const addBtn = document.getElementById('add-projeto-btn');
+            const overlay = document.getElementById('overlay');
+            const form = document.getElementById('projeto-form');
+            const closeBtn = document.getElementById('close-form');
+            const cancelBtn = document.getElementById('cancel-form');
+            const editBtns = document.querySelectorAll('.edit-btn');
+            const deleteBtns = document.querySelectorAll('.delete-btn');
+            const projetistaSelect = document.getElementById('projeto-projetista');
+            const novoProjetistaContainer = document.getElementById('novo-projetista-container');
+            const especialidadeSelect = document.getElementById('projeto-especialidade');
+            const novaEspecialidadeContainer = document.getElementById('nova-especialidade-container');
+            
+            // Função para mostrar o formulário
+            function showForm() {
+                overlay.style.display = 'block';
+                form.style.display = 'block';
+            }
+            
+            // Função para esconder o formulário
+            function hideForm() {
+                overlay.style.display = 'none';
+                form.style.display = 'none';
+                document.getElementById('projeto-form-element').reset();
+                document.getElementById('form-title').textContent = 'Adicionar Novo Projeto';
+                novoProjetistaContainer.style.display = 'none';
+                novaEspecialidadeContainer.style.display = 'none';
+            }
+            
+            // Eventos para fechar o formulário
+            closeBtn.addEventListener('click', hideForm);
+            cancelBtn.addEventListener('click', hideForm);
+            
+            // Evento para adicionar novo projeto
+            addBtn.addEventListener('click', function() {
+                showForm();
+            });
+            
+            // Eventos para fechar o formulário
+            closeBtn.addEventListener('click', hideForm);
+            cancelBtn.addEventListener('click', hideForm);
+            overlay.addEventListener('click', hideForm);
+            
+            // Evento para mostrar campo de novo projetista
+            projetistaSelect.addEventListener('change', function() {
+                if (this.value === 'Novo Projetista') {
+                    novoProjetistaContainer.style.display = 'block';
+                } else {
+                    novoProjetistaContainer.style.display = 'none';
+                }
+            });
+            
+            // Evento para mostrar campo de nova especialidade
+            especialidadeSelect.addEventListener('change', function() {
+                if (this.value === 'OUTROS') {
+                    novaEspecialidadeContainer.style.display = 'block';
+                } else {
+                    novaEspecialidadeContainer.style.display = 'none';
+                }
+            });
+            
+            // Adiciona eventos aos botões existentes
+            editBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const cells = row.cells;
+                    
+                    document.getElementById('form-title').textContent = 'Editar Projeto';
+                    document.getElementById('projeto-id').value = cells[0].textContent;
+                    document.getElementById('projeto-nome').value = cells[1].textContent;
+                    document.getElementById('projeto-projetista').value = cells[2].textContent;
+                    document.getElementById('projeto-especialidade').value = cells[3].textContent;
+                    document.getElementById('projeto-etapa').value = cells[4].textContent;
+                    document.getElementById('projeto-progresso').value = cells[5].querySelector('.progress-bar').textContent.replace('%', '');
+                    document.getElementById('projeto-inicio').value = formatDateToISO(cells[6].textContent);
+                    document.getElementById('projeto-previsao').value = formatDateToISO(cells[7].textContent);
+                    document.getElementById('projeto-prioridade').value = cells[8].querySelector('.badge').textContent;
+                    document.getElementById('projeto-status').value = cells[9].textContent;
+                    document.getElementById('projeto-observacoes').value = cells[10].textContent;
+                    
+                    showForm();
+                });
+            });
+            
+            // Eventos para os botões de excluir
+            deleteBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja excluir este projeto?')) {
+                        const row = this.closest('tr');
+                        row.remove();
+                    }
+                });
+            });
+            
+            // Adiciona eventos aos botões de todas as linhas existentes ao carregar a página
+            const initialRows = document.querySelectorAll('#tabela-projetos tbody tr');
+            initialRows.forEach(function(row) {
+                addButtonEvents(row);
+            });
+            
+            // Inicializa os gráficos
+            let statusChart, projetistaChart, especialidadeChart;
+            initCharts();
+            
+            // Função para inicializar os gráficos
+            function initCharts() {
+                // Obter dados para os gráficos
+                const chartData = getChartData();
+                
+                // Gráfico de Status
+                const statusCtx = document.getElementById('statusChart').getContext('2d');
+                statusChart = new Chart(statusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(chartData.statusCount),
+                        datasets: [{
+                            data: Object.values(chartData.statusCount),
+                            backgroundColor: [
+                                '#e0e0e0', // Não iniciado
+                                '#fff9c4', // Em andamento
+                                '#ffcdd2', // Atrasado
+                                '#c8e6c9'  // Concluído
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+                
+                // Gráfico de Projetistas
+                const projetistaCtx = document.getElementById('projetistaChart').getContext('2d');
+                projetistaChart = new Chart(projetistaCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(chartData.projetistaCount),
+                        datasets: [{
+                            label: 'Número de Projetos',
+                            data: Object.values(chartData.projetistaCount),
+                            backgroundColor: '#3498db',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Gráfico de Especialidades
+                const especialidadeCtx = document.getElementById('especialidadeChart').getContext('2d');
+                especialidadeChart = new Chart(especialidadeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(chartData.especialidadeProgress),
+                        datasets: [{
+                            label: 'Progresso Médio (%)',
+                            data: Object.values(chartData.especialidadeProgress),
+                            backgroundColor: '#2ecc71',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Função para obter dados para os gráficos da tabela
+            function getChartData() {
+                const rows = document.querySelectorAll('#tabela-projetos tbody tr');
+                
+                // Contadores iniciais
+                const statusCount = {
+                    'Não iniciado': 0,
+                    'Em andamento': 0,
+                    'Atrasado': 0,
+                    'Concluído': 0
+                };
+                
+                const projetistaCount = {};
+                
+                // Para calcular a média de progresso por especialidade
+                const especialidadeProgress = {};
+                const especialidadeCount = {};
+                
+                // Processa cada linha
+                rows.forEach(row => {
+                    // Status
+                    const status = row.cells[9].textContent;
+                    statusCount[status]++;
+                    
+                    // Projetista
+                    const projetista = row.cells[2].textContent;
+                    projetistaCount[projetista] = (projetistaCount[projetista] || 0) + 1;
+                    
+                    // Especialidade e progresso
+                    const especialidade = row.cells[3].textContent;
+                    const progresso = parseFloat(row.cells[5].querySelector('.progress-bar').textContent);
+                    
+                    if (!especialidadeProgress[especialidade]) {
+                        especialidadeProgress[especialidade] = 0;
+                        especialidadeCount[especialidade] = 0;
+                    }
+                    
+                    especialidadeProgress[especialidade] += progresso;
+                    especialidadeCount[especialidade]++;
+                });
+                
+                // Calcula média de progresso por especialidade
+                for (const esp in especialidadeProgress) {
+                    if (especialidadeCount[esp] > 0) {
+                        especialidadeProgress[esp] = Math.round(especialidadeProgress[esp] / especialidadeCount[esp]);
+                    }
+                }
+                
+                return {
+                    statusCount,
+                    projetistaCount,
+                    especialidadeProgress
+                };
+            }
+            
+            // Função para atualizar os gráficos
+            function updateCharts() {
+                const chartData = getChartData();
+                
+                // Atualiza o gráfico de status
+                statusChart.data.labels = Object.keys(chartData.statusCount);
+                statusChart.data.datasets[0].data = Object.values(chartData.statusCount);
+                statusChart.update();
+                
+                // Atualiza o gráfico de projetistas
+                projetistaChart.data.labels = Object.keys(chartData.projetistaCount);
+                projetistaChart.data.datasets[0].data = Object.values(chartData.projetistaCount);
+                projetistaChart.update();
+                
+                // Atualiza o gráfico de especialidades
+                especialidadeChart.data.labels = Object.keys(chartData.especialidadeProgress);
+                especialidadeChart.data.datasets[0].data = Object.values(chartData.especialidadeProgress);
+                especialidadeChart.update();
+            }
+            
+            // Função auxiliar para formatar data DD/MM/YYYY para YYYY-MM-DD (formato ISO para input date)
+            function formatDateToISO(dateString) {
+                const parts = dateString.split('/');
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+            
+            // Evento de submit do formulário
+            document.getElementById('projeto-form-element').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Obter valores do formulário
+                const id = document.getElementById('projeto-id').value;
+                const nome = document.getElementById('projeto-nome').value;
+                const projetista = document.getElementById('projeto-projetista').value === 'Novo Projetista' ? 
+                    document.getElementById('novo-projetista').value : 
+                    document.getElementById('projeto-projetista').value;
+                const especialidade = document.getElementById('projeto-especialidade').value === 'Outro' ? 
+                    document.getElementById('nova-especialidade').value : 
+                    document.getElementById('projeto-especialidade').value;
+                const etapa = document.getElementById('projeto-etapa').value;
+                const progresso = document.getElementById('projeto-progresso').value;
+                const dataInicio = document.getElementById('projeto-inicio').value;
+                const dataPrevisao = document.getElementById('projeto-previsao').value;
+                const prioridade = document.getElementById('projeto-prioridade').value;
+                const status = document.getElementById('projeto-status').value;
+                const observacoes = document.getElementById('projeto-observacoes').value;
+                
+                // Formatando as datas para exibição (YYYY-MM-DD para DD/MM/YYYY)
+                const dataInicioFormatada = formatDateToDisplay(dataInicio);
+                const dataPrevisaoFormatada = formatDateToDisplay(dataPrevisao);
+                
+                // Verifica se está editando ou criando
+                const formTitle = document.getElementById('form-title').textContent;
+                
+                if (formTitle === 'Editar Projeto') {
+                    // Encontra a linha a ser editada
+                    const rows = document.querySelectorAll('#tabela-projetos tbody tr');
+                    for (let i = 0; i < rows.length; i++) {
+                        if (rows[i].cells[0].textContent === id) {
+                            updateRow(rows[i]);
+                            break;
+                        }
+                    }
+                } else {
+                    // Cria uma nova linha
+                    const tbody = document.querySelector('#tabela-projetos tbody');
+                    const newRow = document.createElement('tr');
+                    newRow.className = getStatusClass(status);
+                    
+                    // Adiciona o conteúdo da linha
+                    newRow.innerHTML = `
+                        <td>${id}</td>
+                        <td>${nome}</td>
+                        <td>${projetista}</td>
+                        <td>${especialidade}</td>
+                        <td>${etapa}</td>
+                        <td>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${progresso}%; background-color: ${getProgressColor(progresso, status)}">${progresso}%</div>
+                            </div>
+                        </td>
+                        <td>${dataInicioFormatada}</td>
+                        <td>${dataPrevisaoFormatada}</td>
+                        <td><span class="badge priority-${prioridade.toLowerCase()}">${prioridade}</span></td>
+                        <td>${status}</td>
+                        <td class="observacoes-cell">${observacoes}</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn">Editar</button>
+                            <button class="delete-btn">Excluir</button>
+                        </td>
+                    `;
+                    
+                    // Adiciona a nova linha à tabela
+                    tbody.appendChild(newRow);
+                    
+                    // Adiciona evento aos novos botões
+                    addButtonEvents(newRow);
+                    
+                    // Atualiza os gráficos
+                    updateCharts();
+                }
+                
+                alert('Projeto salvo com sucesso!');
+                hideForm();
+            });
+            
+            // Função para atualizar uma linha existente
+            function updateRow(row) {
+                const id = document.getElementById('projeto-id').value;
+                const nome = document.getElementById('projeto-nome').value;
+                const projetista = document.getElementById('projeto-projetista').value === 'Novo Projetista' ? 
+                    document.getElementById('novo-projetista').value : 
+                    document.getElementById('projeto-projetista').value;
+                const especialidade = document.getElementById('projeto-especialidade').value === 'Outro' ? 
+                    document.getElementById('nova-especialidade').value : 
+                    document.getElementById('projeto-especialidade').value;
+                const etapa = document.getElementById('projeto-etapa').value;
+                const progresso = document.getElementById('projeto-progresso').value;
+                const dataInicio = document.getElementById('projeto-inicio').value;
+                const dataPrevisao = document.getElementById('projeto-previsao').value;
+                const prioridade = document.getElementById('projeto-prioridade').value;
+                const status = document.getElementById('projeto-status').value;
+                const observacoes = document.getElementById('projeto-observacoes').value;
+                
+                // Formatando as datas para exibição
+                const dataInicioFormatada = formatDateToDisplay(dataInicio);
+                const dataPrevisaoFormatada = formatDateToDisplay(dataPrevisao);
+                
+                // Atualiza a classe da linha baseada no status
+                row.className = getStatusClass(status);
+                
+                // Atualiza os valores das células
+                row.cells[0].textContent = id;
+                row.cells[1].textContent = nome;
+                row.cells[2].textContent = projetista;
+                row.cells[3].textContent = especialidade;
+                row.cells[4].textContent = etapa;
+                row.cells[5].innerHTML = `
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${progresso}%; background-color: ${getProgressColor(progresso, status)}">${progresso}%</div>
+                    </div>
+                `;
+                row.cells[6].textContent = dataInicioFormatada;
+                row.cells[7].textContent = dataPrevisaoFormatada;
+                row.cells[8].innerHTML = `<span class="badge priority-${prioridade.toLowerCase()}">${prioridade}</span>`;
+                row.cells[9].textContent = status;
+                row.cells[10].textContent = observacoes;
+                
+                // Atualiza os gráficos depois de editar
+                updateCharts();
+            }
+            
+            // Função para adicionar eventos aos botões de uma linha
+            function addButtonEvents(row) {
+                const editBtn = row.querySelector('.edit-btn');
+                const deleteBtn = row.querySelector('.delete-btn');
+                
+                editBtn.addEventListener('click', function() {
+                    const cells = row.cells;
+                    
+                    document.getElementById('form-title').textContent = 'Editar Projeto';
+                    document.getElementById('projeto-id').value = cells[0].textContent;
+                    document.getElementById('projeto-nome').value = cells[1].textContent;
+                    document.getElementById('projeto-projetista').value = cells[2].textContent;
+                    document.getElementById('projeto-especialidade').value = cells[3].textContent;
+                    document.getElementById('projeto-etapa').value = cells[4].textContent;
+                    document.getElementById('projeto-progresso').value = cells[5].querySelector('.progress-bar').textContent.replace('%', '');
+                    document.getElementById('projeto-inicio').value = formatDateToISO(cells[6].textContent);
+                    document.getElementById('projeto-previsao').value = formatDateToISO(cells[7].textContent);
+                    document.getElementById('projeto-prioridade').value = cells[8].querySelector('.badge').textContent;
+                    document.getElementById('projeto-status').value = cells[9].textContent;
+                    document.getElementById('projeto-observacoes').value = cells[10].textContent;
+                    
+                    showForm();
+                });
+                
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja excluir este projeto?')) {
+                        row.remove();
+                        // Atualiza os gráficos após excluir
+                        updateCharts();
+                    }
+                });
+            }
+            
+            // Função para obter a classe do status
+            function getStatusClass(status) {
+                switch (status) {
+                    case 'Em andamento': return 'status-em-andamento';
+                    case 'Atrasado': return 'status-atrasado';
+                    case 'Concluído': return 'status-concluido';
+                    case 'Não iniciado': return 'status-nao-iniciado';
+                    default: return '';
+                }
+            }
+            
+            // Função para obter a cor da barra de progresso
+            function getProgressColor(progresso, status) {
+                if (status === 'Concluído') return '#27ae60';
+                if (status === 'Atrasado') return '#e74c3c';
+                if (status === 'Não iniciado') return '#95a5a6';
+                return '#3498db'; // Em andamento
+            }
+            
+            // Função para formatar data YYYY-MM-DD para DD/MM/YYYY
+            function formatDateToDisplay(dateString) {
+                const parts = dateString.split('-');
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            
+            // Implementação básica do filtro
+            document.getElementById('filter-btn').addEventListener('click', function() {
+                const searchText = document.getElementById('search').value.toLowerCase();
+                const statusFilter = document.getElementById('filter-status').value;
+                const projetistaFilter = document.getElementById('filter-projetista').value;
+                
+                const rows = document.querySelectorAll('#tabela-projetos tbody tr');
+                
+                rows.forEach(function(row) {
+                    let matchSearch = false;
+                    let matchStatus = true;
+                    let matchProjetista = true;
+                    
+                    // Verificar texto de busca
+                    const cells = row.cells;
+                    for (let i = 0; i < cells.length - 1; i++) {
+                        if (cells[i].textContent.toLowerCase().includes(searchText)) {
+                            matchSearch = true;
+                            break;
+                        }
+                    }
+                    
+                    // Verificar filtro de status
+                    if (statusFilter && cells[9].textContent !== statusFilter) {
+                        matchStatus = false;
+                    }
+                    
+                    // Verificar filtro de projetista
+                    if (projetistaFilter && cells[2].textContent !== projetistaFilter) {
+                        matchProjetista = false;
+                    }
+                    
+                    // Mostrar ou esconder linha baseado nos filtros
+                    if (matchSearch && matchStatus && matchProjetista) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Implementação básica de exportação para Excel
+            document.getElementById('export-excel').addEventListener('click', function() {
+                alert('Funcionalidade de exportação para Excel seria implementada aqui!');
+                // Em uma implementação real, você usaria uma biblioteca como SheetJS (xlsx)
+                // para gerar o arquivo Excel e fazer o download
+            });
+        });
+    </script>
+</body>
+</html>
