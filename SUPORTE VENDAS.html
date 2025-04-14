@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabela de Consulta para Vendedores - Ar-Condicionados</title>
+  <!-- Adicionando a biblioteca jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+      color: #333;
+    }
+    
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    h2 {
+      color: #666;
+      font-weight: normal;
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .padrao-box {
+      width: 19%;
+      min-width: 210px;
+      margin-bottom: 20px;
+    }
+    
+    .padrao-header {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .color-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .padrao-A { background-color: #0088FE; }
+    .padrao-B { background-color: #00C49F; }
+    .padrao-C { background-color: #FFBB28; }
+    .padrao-D { background-color: #FF8042; }
+    .padrao-E { background-color: #8884d8; }
+    
+    .dim-tag {
+      font-size: 12px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      padding: 3px 6px;
+      margin-left: 5px;
+    }
+    
+    .padrao-content {
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      padding: 10px;
+    }
+    
+    .modelo-item {
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modelo-marca {
+      font-weight: bold;
+    }
+    
+    .modelo-specs {
+      font-size: 13px;
+      color: #555;
+      display: flex;
+      align-items: center;
+    }
+    
+    .main-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    
+    .main-table th {
+      background-color: #f0f0f0;
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .main-table td {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+    
+    .search-container {
+      margin-bottom: 20px;
+    }
+    
+    .search-container input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .main-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .main-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .modelo-marca {
+      position: relative;
+    }
+    
+    .marca-highlight {
+      font-weight: bold;
+    }
+    
+    .highlight-row {
+      background-color: #fff8e1 !important;
+    }
+    
+    .note {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+      margin-top: 15px;
+    }
+    
+    .formato-tag {
+      font-size: 11px;
+      background-color: #e3f2fd;
+      color: #1976d2;
+      padding: 2px 5px;
+      border-radius: 3px;
+      margin-left: 5px;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .action-button {
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      color: white;
+    }
+    
+    .print-button {
+      background-color: #4CAF50;
+    }
+    
+    .export-button {
+      background-color: #2196F3;
+    }
+    
+    @media print {
+      .search-container, .button-container {
+        display: none;
+      }
+      
+      body {
+        padding: 0;
+        background-color: white;
+      }
+      
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      
+      .padrao-box {
+        width: 32%;
+        page-break-inside: avoid;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .padrao-box {
+        width: 48%;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .padrao-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tabela de Consulta para Vendedores</h1>
+    <h2>Guia de dimensões para ar-condicionados em sacadas</h2>
+    
+    <div class="button-container">
+      <button class="action-button print-button" onclick="window.print()">Imprimir Tabela</button>
+      <button class="action-button export-button" onclick="exportPDF()">Exportar PDF</button>
+    </div>
+    
+    <div class="card">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Pesquisar por marca." onkeyup="searchTable()">
+      </div>
+      
+      <table class="main-table" id="modelosTable">
+        <thead>
+          <tr>
+            <th>Padrão</th>
+            <th>Marca</th>
+            <th>Potência (BTU)</th>
+            <th>Formato</th>
+            <th>Dimensões (L×A×P)</th>
+            <th>Com Folga (L×A×P)</th>
+            <th>Caixa (L×A×P)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- LG -->
+          <tr class="marca-LG">
+            <td><span class="color-dot padrao-A"></span> A</td>
+            <td class="marca-highlight">LG</td>
+            <td>9.000 - 12.000</td>
+            <td>quadrado</td>
+            <td>71,7 × 49,5 × 23 cm</td>
+            <td>82 × 60 × 33 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-LG">
+            <td><span class="color-dot padrao-A"></span> A</td>
+            <td class="marca-highlight">LG</td>
+            <td>18.000</td>
+            <td>quadrado</td>
+            <td>77 × 54,5 × 28,8 cm</td>
+            <td>87 × 65 × 39 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-LG">
+            <td><span class="color-dot padrao-A"></span> A</td>
+            <td class="marca-highlight">LG</td>
+            <td>21.000</td>
+            <td>quadrado</td>
+            <td>77 × 54,5 × 28,8 cm</td>
+            <td>87 × 65 × 39 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          
+          <!-- Samsung -->
+          <tr class="marca-Samsung">
+            <td><span class="color-dot padrao-A"></span> A</td>
+            <td class="marca-highlight">Samsung</td>
+            <td>9.000 - 12.000</td>
+            <td>quadrado</td>
+            <td>66 × 47,5 × 24,2 cm</td>
+            <td>76 × 58 × 35 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-Samsung">
+            <td><span class="color-dot padrao-A"></span> A</td>
+            <td class="marca-highlight">Samsung</td>
+            <td>18.000</td>
+            <td>quadrado</td>
+            <td>79 × 54,8 × 28,5 cm</td>
+            <td>89 × 65 × 39 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-Samsung">
+            <td><span class="color-dot padrao-B"></span> B</td>
+            <td class="marca-highlight">Samsung</td>
+            <td>21.000</td>
+            <td>quadrado</td>
+            <td>88 × 63,8 × 31 cm</td>
+            <td>98 × 74 × 41 cm</td>
+            <td>100 × 95 × 50 cm</td>
+          </tr>
+          
+          <!-- Carrier -->
+          <tr class="marca-Carrier">
+            <td><span class="color-dot padrao-C"></span> C</td>
+            <td class="marca-highlight">Carrier</td>
+            <td>9.000 - 12.000</td>
+            <td>cilíndrico <span class="formato-tag">especial</span></td>
+            <td>47,1 × 70,7 × 55,1 cm</td>
+            <td>58 × 81 × 66 cm</td>
+            <td>80 × 95 × 70 cm</td>
+          </tr>
+          <tr class="marca-Carrier">
+            <td><span class="color-dot padrao-C"></span> C</td>
+            <td class="marca-highlight">Carrier</td>
+            <td>18.000</td>
+            <td>cilíndrico <span class="formato-tag">especial</span></td>
+            <td>47,1 × 70,7 × 55,1 cm</td>
+            <td>58 × 81 × 66 cm</td>
+            <td>80 × 95 × 70 cm</td>
+          </tr>
+          <tr class="marca-Carrier">
+            <td><span class="color-dot padrao-C"></span> C</td>
+            <td class="marca-highlight">Carrier</td>
+            <td>21.000</td>
+            <td>cilíndrico <span class="formato-tag">especial</span></td>
+            <td>47,1 × 70,7 × 55,1 cm</td>
+            <td>58 × 81 × 66 cm</td>
+            <td>80 × 95 × 70 cm</td>
+          </tr>
+          
+          <!-- Fujitsu -->
+          <tr class="marca-Fujitsu">
+            <td><span class="color-dot padrao-D"></span> D</td>
+            <td class="marca-highlight">Fujitsu</td>
+            <td>9.000 - 12.000</td>
+            <td>quadrado</td>
+            <td>66,3 × 54,1 × 29 cm</td>
+            <td>77 × 65 × 39 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-Fujitsu">
+            <td><span class="color-dot padrao-D"></span> D</td>
+            <td class="marca-highlight">Fujitsu</td>
+            <td>18.000</td>
+            <td>quadrado</td>
+            <td>79 × 62 × 29 cm</td>
+            <td>89 × 72 × 39 cm</td>
+            <td>90 × 95 × 40 cm</td>
+          </tr>
+          <tr class="marca-Fujitsu">
+            <td><span class="color-dot padrao-C"></span> C</td>
+            <td class="marca-highlight">Fujitsu</td>
+            <td>21.000</td>
+            <td>quadrado</td>
+            <td>90 × 70 × 33 cm</td>
+            <td>100 × 80 × 43 cm</td>
+            <td>80 × 95 × 70 cm</td>
+          </tr>
+          
+          <!-- Midea -->
+          <tr class="marca-Midea">
+            <td><span class="color-dot padrao-B"></span> B</td>
+            <td class="marca-highlight">Midea</td>
+            <td>12.000</td>
+            <td>quadrado</td>
+            <td>79,2 × 49,5 × 28 cm</td>
+            <td>90 × 60 × 38 cm</td>
+            <td>100 × 95 × 50 cm</td>
+          </tr>
+          <tr class="marca-Midea">
+            <td><span class="color-dot padrao-B"></span> B</td>
+            <td class="marca-highlight">Midea</td>
+            <td>18.000</td>
+            <td>quadrado</td>
+            <td>83,5 × 55,5 × 31 cm</td>
+            <td>94 × 66 × 41 cm</td>
+            <td>100 × 95 × 50 cm</td>
+          </tr>
+          <tr class="marca-Midea">
+            <td><span class="color-dot padrao-E"></span> E</td>
+            <td class="marca-highlight">Midea</td>
+            <td>21.000</td>
+            <td>quadrado</td>
+            <td>66 × 76 × 43 cm</td>
+            <td>76 × 86 × 53 cm</td>
+            <td>90 × 95 × 70 cm</td>
+          </tr>
+          
+          <!-- Gree -->
+          <tr class="marca-Gree">
+            <td><span class="color-dot padrao-E"></span> E</td>
+            <td class="marca-highlight">Gree</td>
+            <td>12.000</td>
+            <td>quadrado</td>
+            <td>42,5 × 54,5 × 42 cm</td>
+            <td>53 × 65 × 52 cm</td>
+            <td>90 × 95 × 70 cm</td>
+          </tr>
+          <tr class="marca-Gree">
+            <td><span class="color-dot padrao-B"></span> B</td>
+            <td class="marca-highlight">Gree</td>
+            <td>18.000</td>
+            <td>quadrado</td>
+            <td>82,2 × 55 × 35,2 cm</td>
+            <td>93 × 65 × 46 cm</td>
+            <td>100 × 95 × 50 cm</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p class="note">* Folga técnica: 10cm adicionais em cada dimensão para instalação e manutenção</p>
+      <p class="note">* Altura padrão 95cm conforme NBR 14.718 (1,10m acabado)</p>
+      <p class="note">* Todos os modelos possuem saída no lado direito</p>
+    </div>
+    
+    <div class="card">
+      <h3 style="margin-bottom: 15px;">Referência Rápida por Padrão</h3>
+      <div class="flex-container">
+        <div class="padrao-box">
+          <div class="padrao-header">
+            <span class="color-dot padrao-A"></span> Padrão A
+            <span class="dim-tag">90×95×40</span>
+          </div>
+          <div class="padrao-content">
+            <div class="modelo-item">
+              <span class="modelo-marca">LG</span>
+              <span class="modelo-specs">9.000 até 21.000 BTUs</span>
+            </div>
+            <div class="modelo-item">
+              <span class="modelo-marca">Samsung</span>
+              <span class="modelo-specs">9.000 até 18.000 BTUs</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="padrao-box">
+          <div class="padrao-header">
+            <span class="color-dot padrao-B"></span> Padrão B
+            <span class="dim-tag">100×95×50</span>
+          </div>
+          <div class="padrao-content">
+            <div class="modelo-item">
+              <span class="modelo-marca">Samsung</span>
+              <span class="modelo-specs">21.000 BTUs</span>
+            </div>
+            <div class="modelo-item">
+              <span class="modelo-marca">Midea</span>
+              <span class="modelo-specs">12.000 e 18.000 BTUs</span>
+            </div>
+            <div class="modelo-item">
+              <span class="modelo-marca">Gree</span>
+              <span class="modelo-specs">18.000 BTUs</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="padrao-box">
+          <div class="padrao-header">
+            <span class="color-dot padrao-C"></span> Padrão C
+            <span class="dim-tag">80×95×70</span>
+          </div>
+          <div class="padrao-content">
+            <div class="modelo-item">
+              <span class="modelo-marca">Carrier</span>
+              <span class="modelo-specs">Todos os modelos <span class="formato-tag">cilíndrico</span></span>
+            </div>
+            <div class="modelo-item">
+              <span class="modelo-marca">Fujitsu</span>
+              <span class="modelo-specs">21.000 BTUs</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="padrao-box">
+          <div class="padrao-header">
+            <span class="color-dot padrao-D"></span> Padrão D
+            <span class="dim-tag">90×95×40</span>
+          </div>
+          <div class="padrao-content">
+            <div class="modelo-item">
+              <span class="modelo-marca">Fujitsu</span>
+              <span class="modelo-specs">9.000 até 18.000 BTUs</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="padrao-box">
+          <div class="padrao-header">
+            <span class="color-dot padrao-E"></span> Padrão E
+            <span class="dim-tag">90×95×70</span>
+          </div>
+          <div class="padrao-content">
+            <div class="modelo-item">
+              <span class="modelo-marca">Midea</span>
+              <span class="modelo-specs">21.000 BTUs</span>
+            </div>
+            <div class="modelo-item">
+              <span class="modelo-marca">Gree</span>
+              <span class="modelo-specs">12.000 BTUs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Inicializa o namespace jsPDF
+    window.jspdf = window.jspdf || {};
+    
+    function searchTable() {
+      // Obtém o valor da pesquisa
+      var input = document.getElementById("searchInput");
+      var filter = input.value.toUpperCase();
+      var table = document.getElementById("modelosTable");
+      var tr = table.getElementsByTagName("tr");
+      
+      // Loop por todas as linhas e oculta as que não correspondem à pesquisa
+      for (var i = 1; i < tr.length; i++) {
+        var found = false;
+        var td = tr[i].getElementsByTagName("td");
+        
+        for (var j = 0; j < td.length; j++) {
+          if (td[j]) {
+            var txtValue = td[j].textContent || td[j].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+        
+        if (found) {
+          tr[i].style.display = "";
+          tr[i].classList.add("highlight-row");
+        } else {
+          tr[i].style.display = "none";
+          tr[i].classList.remove("highlight-row");
+        }
+        
+        // Se a pesquisa estiver vazia, remova o destaque
+        if (filter === "") {
+          tr[i].classList.remove("highlight-row");
+        }
+      }
+    }
+    
+    function exportPDF() {
+      // Inicializa jsPDF
+      const { jsPDF } = window.jspdf;
+      
+      // Cria um novo documento PDF
+      const doc = new jsPDF('landscape', 'mm', 'a4');
+      
+      // Adiciona título ao PDF
+      doc.setFontSize(16);
+      doc.text('Tabela de Consulta para Vendedores - Ar-Condicionados', 14, 15);
+      doc.setFontSize(12);
+      doc.text('Guia de dimensões para ar-condicionados em sacadas', 14, 22);
+      
+      // Adiciona a tabela principal
+      const table = document.getElementById('modelosTable');
+      
+      // Prepara os dados da tabela para jspdf-autotable
+      const tableData = [];
+      const tableHeaders = [];
+      
+      // Obtém os cabeçalhos
+      const headerCells = table.querySelectorAll('thead th');
+      headerCells.forEach(cell => {
+        tableHeaders.push(cell.textContent);
+      });
+      
+      // Obtém os dados das linhas
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const rowData = [];
+        const cells = row.querySelectorAll('td');
+        cells.forEach((cell, index) => {
+          // Para a coluna do padrão, apenas pega a letra (A, B, C, etc.)
+          if (index === 0) {
+            rowData.push(cell.textContent.trim());
+          } else {
+            rowData.push(cell.textContent);
+          }
+        });
+        tableData.push(rowData);
+      });
+      
+      // Configura opções da tabela
+      const tableOptions = {
+        startY: 30,
+        head: [tableHeaders],
+        body: tableData,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [240, 240, 240],
+          textColor: [0, 0, 0],
+          fontStyle: 'bold'
+        },
+        styles: {
+          fontSize: 8,
+          cellPadding: 2
+        },
+        columnStyles: {
+          0: { cellWidth: 15 }, // Padrão
+          1: { cellWidth: 25 }, // Marca
+          2: { cellWidth: 30 }, // Potência
+          3: { cellWidth: 25 }, // Formato
+          4: { cellWidth: 35 }, // Dimensões
+          5: { cellWidth: 35 }, // Com Folga
+          6: { cellWidth: 35 }  // Caixa
+        }
+      };
+      
+      // Gera a tabela
+      doc.autoTable(tableOptions);
+      
+      // Adiciona as notas
+      const currentY = doc.previousAutoTable.finalY + 10;
+      doc.setFontSize(8);
+      doc.text('* Folga técnica: 10cm adicionais em cada dimensão para instalação e manutenção', 14, currentY);
+      doc.text('* Altura padrão 95cm conforme NBR 14.718 (1,10m acabado)', 14, currentY + 5);
+      doc.text('* Todos os modelos possuem saída no lado direito', 14, currentY + 10);
+      
+      // Adiciona a data de geração
+      const dataAtual = new Date();
+      const dataFormatada = dataAtual.toLocaleDateString('pt-BR');
+      doc.setFontSize(8);
+      doc.text('Documento gerado em: ' + dataFormatada, 14, currentY + 20);
+      
+      // Salva o PDF
+      doc.save('tabela-ar-condicionados.pdf');
+    }
+  </script>
+</body>
+</html>
