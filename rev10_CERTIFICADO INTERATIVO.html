@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAN GLASS - Sistema Integrado</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #0066cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+        .footer {
+            background-color: #6c6c6c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 10px 10px 0 0;
+        }
+        .form-section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        table th {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+        .btn-primary {
+            background-color: #0066cc;
+            border-color: #0066cc;
+        }
+        .btn-primary:hover {
+            background-color: #0055aa;
+            border-color: #0055aa;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #0066cc;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .maintenance-cell-client {
+            background-color: #fff3cd;
+        }
+        .maintenance-cell-sanglass {
+            background-color: #d1ecf1;
+        }
+        /* Novas classes para as informações do produto */
+        .product-details {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 3px solid #0066cc;
+        }
+        .detail-title {
+            color: #0066cc;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .detail-content {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        .detail-item {
+            margin-bottom: 5px;
+        }
+        .tooltip-icon {
+            color: #0066cc;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .feature-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 2px;
+            background-color: #e6f2ff;
+            border: 1px solid #b8daff;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white;
+            }
+            .form-section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>SAN GLASS</h1>
+            <p>Formulário de Produtos e Serviços</p>
+        </div>
+
+        <!-- Informações do Cliente -->
+        <div class="form-section">
+            <h2 class="section-title">Informações do Cliente</h2>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="wvCode" class="form-label">Código WV</label>
+                    <input type="text" class="form-control" id="wvCode" placeholder="Ex: WV 5582">
+                </div>
+                <div class="col-md-4">
+                    <label for="clientName" class="form-label">Nome do Cliente</label>
+                    <input type="text" class="form-control" id="clientName" placeholder="Nome completo">
+                </div>
+                <div class="col-md-3">
+                    <label for="clientAddress" class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="clientAddress" placeholder="Endereço completo">
+                </div>
+                <div class="col-md-2">
+                    <label for="currentDate" class="form-label">Data</label>
+                    <input type="date" class="form-control" id="currentDate">
+                </div>
+            </div>
+        </div>
+
+        <!-- Produtos -->
+        <div class="form-section">
+            <h2 class="section-title">Produtos</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="productTable">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="25%">Ambiente</th>
+                            <th width="45%">Tipo de Produto</th>
+                            <th width="10%">Quantidade</th>
+                            <th width="10%">Unidade</th>
+                            <th width="5%">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linha inicial será adicionada via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-primary" onclick="addRow()">
+                    <i class="fas fa-plus me-2"></i>Adicionar Linha
+                </button>
+                <button type="button" class="btn btn-success" onclick="generateReport()">
+                    <i class="fas fa-file-alt me-2"></i>Gerar Relatório
+                </button>
+            </div>
+        </div>
+
+        <!-- Informações do Produto -->
+        <div class="form-section" id="produtoInfoSection" style="display: none;">
+            <h2 class="section-title">Informações Técnicas do Produto</h2>
+            <div id="produtoInfoContent">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Área do Relatório (inicialmente oculta) -->
+        <div id="relatorioArea" style="display: none;">
+            <!-- O relatório será inserido aqui via JavaScript -->
+        </div>
+
+        <!-- Modal para o Relatório -->
+        <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Relatório Técnico - SAN GLASS</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="reportContent">
+                            <!-- Conteúdo do relatório será inserido aqui -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadPDF()">
+                            <i class="fas fa-file-pdf me-2"></i>Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>SAN GLASS - Sistemas de Vidro e Esquadrias</p>
+            <p>Central de Atendimento: +55 11 97651-1780 | E-mail: contato@sanglass.com.br</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jsPDF para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        // Dados completos da tabela Produtos_SanGlass (do arquivo paste.txt)
+        const produtosSanGlass = {
+            "Envidraçamento de Sacada": {
+                tipos_caracteristicas: "• Stanley: Vidros recolhidos alinhadamente\n• Reiki: Abertura total ou parcial\n• Europeu: Sem fechamentos verticais\n• Versatik: Abertura 2/3 do vão\n• Retrátil: Placas recolhidas",
+                normas_tecnicas: "• NBR 15575:2021: Estanqueidade\n• NBR 16259:2014: Sistemas de envidraçamento\n• NBR 10821:2017: Esquadrias",
+                requisitos_manutencao_cliente: "• Limpeza trimestral com produtos não abrasivos\n• Verificação semestral das vedações\n• Lubrificação trimestral de roldanas\n• Em regiões litorâneas, limpeza mensal\n• Verificação trimestral dos trilhos",
+                requisitos_manutencao_empresa: "• Inspeção anual do sistema completo\n• Ajuste anual de folgas e alinhamentos\n• Verificação anual dos chumbadores\n• Regulagem dos sistemas de travamento\n• Teste de estanqueidade",
+                advertencias_perda_garantia: "• Uso de produtos abrasivos ou alcalinos\n• Falta de lubrificação periódica\n• Perfurações ou modificações estruturais\n• Instalação de películas não homologadas\n• Não agendamento da manutenção anual"
+            },
+            "Vidro Laminado": {
+                tipos_caracteristicas: "• PVB Standard: Intercalado convencional\n• PVB Acústico: Redução sonora\n• SGP: Alta resistência\n• Laminado Colorido: Com PVB colorido",
+                normas_tecnicas: "• NBR 15575:2021: Resistência ao impacto\n• NBR 7199:2016: Vidros na construção\n• NBR 14698:2001: Vidros laminados",
+                requisitos_manutencao_cliente: "• Limpeza mensal com produtos neutros\n• Evitar impactos nas bordas\n• Inspeção visual trimestral para delaminação\n• Secagem após limpeza com pano macio",
+                requisitos_manutencao_empresa: "• Inspeção anual das bordas e selantes\n• Verificação bienal de estabilidade\n• Análise de integridade estrutural\n• Avaliação técnica de pontos de fixação",
+                advertencias_perda_garantia: "• Produtos abrasivos na limpeza\n• Impactos nas arestas do vidro\n• Modificações nas especificações\n• Instalação por empresa não autorizada\n• Exposição a condições extremas"
+            },
+            "Vidro Temperado": {
+                tipos_caracteristicas: "• Temperado Incolor: Maior resistência\n• Temperado Colorido: Com pigmentação\n• Temperado Serigrafado: Com impressão\n• Controle Solar: Propriedades térmicas",
+                normas_tecnicas: "• NBR 15575:2021: Requisitos de segurança\n• NBR 14698:2001: Vidros temperados\n• NBR 7199:2016: Projeto e aplicações",
+                requisitos_manutencao_cliente: "• Limpeza mensal com produtos neutros\n• Evitar impactos nas bordas\n• Não fixar objetos pesados\n• Inspeção visual a cada 3 meses",
+                requisitos_manutencao_empresa: "• Verificação anual das fixações\n• Avaliação de tensões residuais (se suspeita)\n• Inspeção das ferragens e acessórios\n• Teste de estabilidade",
+                advertencias_perda_garantia: "• Produtos ácidos na limpeza\n• Tentativas de corte após têmpera\n• Modificações nas ferragens\n• Exposição a choques térmicos\n• Sobrecarga além da especificação"
+            },
+            "Perfis de Alumínio": {
+                tipos_caracteristicas: "• Pintura Eletrostática: Revestimento em pó\n• Anodizados: Tratamento eletroquímico\n• Perfis de Correr: Para sistemas deslizantes\n• Perfis de Giro: Para portas e janelas",
+                normas_tecnicas: "• NBR 15575:2021: Sistemas de vedações\n• NBR 10821:2017: Esquadrias\n• NBR 8116:2021: Alumínio e ligas",
+                requisitos_manutencao_cliente: "• Limpeza trimestral com sabão neutro\n• Em áreas litorâneas, limpeza mensal\n• Lubrificação trimestral de articulações\n• Verificação semestral de vedações",
+                requisitos_manutencao_empresa: "• Verificação anual de fixações\n• Medição de folgas e ajustes\n• Avaliação do estado de conservação\n• Regulagem de mecanismos",
+                advertencias_perda_garantia: "• Produtos corrosivos na limpeza\n• Ausência de manutenção em áreas litorâneas\n• Perfurações na estrutura original\n• Instalação de acessórios não homologados\n• Falta de manutenção documentada"
+            },
+            "Perfis de Aço": {
+                tipos_caracteristicas: "• Aço Carbono: Com tratamento anticorrosivo\n• Aço Galvanizado: Proteção por zincagem\n• Aço Inox: Alta resistência à corrosão\n• Perfis Tubulares: Maior resistência",
+                normas_tecnicas: "• NBR 15575:2021: Desempenho estrutural\n• NBR 8800:2008: Estruturas de aço\n• NBR 6323:2016: Galvanização",
+                requisitos_manutencao_cliente: "• Verificação trimestral de corrosão\n• Limpeza mensal com pano seco\n• Em regiões litorâneas, inspeção mensal\n• Retoque imediato na pintura danificada",
+                requisitos_manutencao_empresa: "• Verificação anual de soldas e conexões\n• Aplicação de protetivos específicos\n• Avaliação de integridade estrutural\n• Renovação periódica de tratamentos anticorrosivos",
+                advertencias_perda_garantia: "• Ausência de tratamento nos pontos de corrosão\n• Não realização da manutenção documentada\n• Modificações não aprovadas\n• Exposição à água salgada sem proteção\n• Sobrecarga além da especificação"
+            },
+            "Solda": {
+                tipos_caracteristicas: "• MIG/MAG: Arco elétrico com gás protetor\n• TIG: Alta precisão para materiais sensíveis\n• Solda Ponto: União por pontos localizados\n• Por Resistência: Para chapas finas",
+                normas_tecnicas: "• NBR 15575:2021: Segurança estrutural\n• NBR 8800:2008: Ligações soldadas\n• AWS D1.1/D1.1M: Soldagem estrutural",
+                requisitos_manutencao_cliente: "• Inspeção visual trimestral\n• Comunicação imediata de trincas\n• Proteção contra umidade excessiva\n• Repintura quando recomendado",
+                requisitos_manutencao_empresa: "• Verificação anual por profissional habilitado\n• Testes não destrutivos quando necessário\n• Verificação da integridade estrutural\n• Tratamento especializado de pontos críticos",
+                advertencias_perda_garantia: "• Soldas por pessoal não qualificado\n• Não tratamento de pontos de oxidação\n• Carga superior à especificada\n• Modificações ou novas soldas não autorizadas\n• Ausência de inspeção periódica"
+            },
+            "Chumbadores e Fixadores": {
+                tipos_caracteristicas: "• Expansão: Fixação por pressão lateral\n• Cunha: Fixação em furo cônico\n• Parabolts: Alta resistência à tração\n• Chumbadores Químicos: Para cargas críticas",
+                normas_tecnicas: "• NBR 15575:2021: Fixação de elementos\n• NBR 14827:2002: Chumbadores em concreto\n• NBR 16035:2012: Fixação de esquadrias",
+                requisitos_manutencao_cliente: "• Verificação visual semestral\n• Não realizar perfurações próximas\n• Comunicar sinais de movimentação\n• Evitar sobrecargas e impactos",
+                requisitos_manutencao_empresa: "• Inspeção anual por profissional habilitado\n• Teste de torque em fixações críticas\n• Verificação de aperto e estabilidade\n• Avaliação da integridade do substrato",
+                advertencias_perda_garantia: "• Instalação em substrato inadequado\n• Carga superior à calculada\n• Perfurações próximas comprometendo integridade\n• Exposição a agentes corrosivos\n• Não realização da inspeção anual"
+            },
+            "Box de Vidro": {
+                tipos_caracteristicas: "• Box de Correr: Com sistema deslizante\n• Box de Abrir: Com dobradiças\n• Box de Canto: Configuração angular\n• Box Frontal: Instalação em um único plano",
+                normas_tecnicas: "• NBR 15575:2021: Estanqueidade\n• NBR 14207:2009: Box de banheiro\n• NBR 7199:2016: Vidros em áreas molhadas",
+                requisitos_manutencao_cliente: "• Limpeza semanal com produtos neutros\n• Secagem após cada uso\n• Limpeza mensal dos trilhos\n• Verificação trimestral dos vedantes",
+                requisitos_manutencao_empresa: "• Verificação anual de roldanas e trilhos\n• Ajuste de folgas e alinhamentos\n• Avaliação da integridade das vedações\n• Substituição preventiva de componentes",
+                advertencias_perda_garantia: "• Uso de produtos abrasivos na limpeza\n• Impactos nas portas de vidro\n• Acúmulo de resíduos nos trilhos\n• Apoiar objetos pesados nas estruturas\n• Não realização da manutenção anual"
+            },
+            "Guarda-Corpo": {
+                tipos_caracteristicas: "• Vidro Temperado: Fixação por botões\n• Vidro Laminado: Com películas de segurança\n• Sistema Engastado: Vidro fixado na base\n• Sistema Pontual: Fixação por botões",
+                normas_tecnicas: "• NBR 15575:2021: Segurança estrutural\n• NBR 14718:2019: Guarda-corpos\n• NBR 7199:2016: Vidros de segurança",
+                requisitos_manutencao_cliente: "• Limpeza trimestral com produtos adequados\n• Inspeção visual de fixações a cada 3 meses\n• Verificação de estabilidade semestral\n• Não pendurar ou apoiar objetos",
+                requisitos_manutencao_empresa: "• Inspeção anual por profissional habilitado\n• Teste de carga a cada 2 anos\n• Verificação das fixações e selantes\n• Avaliação da integridade estrutural",
+                advertencias_perda_garantia: "• Uso como suporte para vasos ou objetos pesados\n• Aplicação de força lateral além da projetada\n• Remoção de qualquer elemento do conjunto\n• Não realização da inspeção anual obrigatória\n• Modificações na estrutura ou método de fixação"
+            },
+            "Sistema Retrátil": {
+                tipos_caracteristicas: "• Painéis Deslizantes: Com recolhimento\n• Sistema de Empilhamento: Sobreposição\n• Sistema com Trilho Superior: Suspensão\n• Sistema com Trilho Inferior: Guia ou suporte",
+                normas_tecnicas: "• NBR 15575:2021: Requisitos de segurança\n• NBR 16259:2014: Sistemas retráteis\n• NBR 10821:2017: Sistemas deslizantes",
+                requisitos_manutencao_cliente: "• Limpeza mensal de trilhos e guias\n• Lubrificação trimestral de rodízios\n• Verificação das escovas de vedação\n• Limpeza dos vidros com produto neutro",
+                requisitos_manutencao_empresa: "• Ajuste anual de folgas por técnico especializado\n• Verificação semestral das vedações\n• Avaliação dos sistemas de travamento\n• Testes de operação e segurança",
+                advertencias_perda_garantia: "• Forçar o sistema em caso de travamento\n• Não realizar limpeza mensal dos trilhos\n• Ausência de lubrificação periódica\n• Obstrução dos drenos de água\n• Não realização da manutenção anual por técnico"
+            },
+            "Vidro Laminado Temperado": {
+                tipos_caracteristicas: "• Duplo Temperado com PVB: Duas lâminas\n• Multi-Camadas: Múltiplas lâminas\n• Estrutural: Alta resistência\n• Anti-Vandalismo: Resistente a impactos",
+                normas_tecnicas: "• NBR 15575:2021: Alto desempenho\n• NBR 14698:2001: Vidros temperados/laminados\n• NBR 7199:2016: Aplicações especiais",
+                requisitos_manutencao_cliente: "• Limpeza mensal com produtos neutros\n• Verificação trimestral de bordas\n• Proteção contra impactos\n• Secagem imediata após limpeza",
+                requisitos_manutencao_empresa: "• Inspeção anual das fixações e suportes\n• Avaliação da integridade das lâminas\n• Verificação de delaminação em bordas\n• Teste de estabilidade em aplicações críticas",
+                advertencias_perda_garantia: "• Uso de produtos abrasivos ou alcalinos\n• Impactos ou batidas nas bordas\n• Modificações nas especificações originais\n• Instalação por empresa não autorizada\n• Exposição a temperaturas extremas"
+            },
+            "Chumbadores Químicos": {
+                tipos_caracteristicas: "• Base Epóxi: Alta resistência química\n• Base Poliéster: Cura rápida\n• Base Viniléster: Resistente à umidade\n• Para Concreto Fissurado: Específico",
+                normas_tecnicas: "• NBR 15575:2021: Fixação à estrutura\n• NBR 14827:2002: Chumbadores\n• ETAG 001: Anexo C - Químicos\n• ACI 318: Fixações em concreto",
+                requisitos_manutencao_cliente: "• Inspeção visual semestral\n• Verificação de sinais de movimentação\n• Proteção contra infiltrações\n• Comunicar qualquer alteração percebida",
+                requisitos_manutencao_empresa: "• Inspeção anual por profissional habilitado\n• Teste de torque e aderência\n• Avaliação de integridade do substrato\n• Verificação de sinais de degradação química",
+                advertencias_perda_garantia: "• Aplicação em superfície não preparada\n• Uso em substrato não especificado\n• Instalação fora da faixa de temperatura\n• Carga antes do tempo de cura total\n• Perfurações adicionais próximas"
+            }
+        };
+
+        // Mapeamento entre produtos do catálogo e produtos da base de dados
+        const mapeamentoProdutos = {
+            // Janelas e Portas
+            "Janela de Correr": "Perfis de Alumínio",
+            "Janela Maxim-ar": "Perfis de Alumínio",
+            "Janela de Abrir": "Perfis de Alumínio",
+            "Janela Guilhotina": "Perfis de Alumínio",
+            "Janela Basculante": "Perfis de Alumínio", 
+            "Janela Pivotante": "Perfis de Alumínio",
+            "Janela Projetante": "Perfis de Alumínio",
+            "Porta de Giro": "Perfis de Alumínio",
+            "Porta de Correr": "Perfis de Alumínio",
+            "Porta Pivotante": "Perfis de Alumínio",
+            "Porta Vai-e-Vem": "Perfis de Alumínio",
+            "Porta de Abrir": "Perfis de Alumínio",
+            "Porta Automática": "Perfis de Alumínio",
+            
+            // Vidros
+            "Vidro Temperado": "Vidro Temperado",
+            "Vidro Laminado": "Vidro Laminado",
+            "Vidro Comum (Float)": "Vidro Temperado",
+            "Vidro Duplo (Insulado)": "Vidro Laminado",
+            "Vidro Serigrafado": "Vidro Temperado",
+            "Vidro Refletivo": "Vidro Temperado",
+            "Vidro Low-E": "Vidro Laminado",
+            "Vidro Acústico": "Vidro Laminado",
+            "Vidro Blindado": "Vidro Laminado Temperado",
+            "Vidro Inteligente (Smart Glass)": "Vidro Laminado Temperado",
+            "Vidro Colorido": "Vidro Temperado",
+            "Vidro Laminado Temperado": "Vidro Laminado Temperado",
+            
+            // Sistemas para Banheiros
+            "Box de Vidro de Correr": "Box de Vidro",
+            "Box de Vidro de Abrir": "Box de Vidro",
+            "Box de Vidro Fixo": "Box de Vidro",
+            "Box com Perfil de Alumínio": "Box de Vidro",
+            "Box sem Perfil (Auto-portante)": "Box de Vidro",
+            "Box de Canto": "Box de Vidro",
+            "Box para Banheira": "Box de Vidro",
+            
+            // Sistemas e Fachadas
+            "Sistema Retrátil": "Sistema Retrátil",
+            "Sistema de Cortina de Vidro": "Envidraçamento de Sacada",
+            "Sistema Automatizado": "Sistema Retrátil",
+            "Fachada Glazing": "Envidraçamento de Sacada",
+            "Fachada Pele de Vidro": "Envidraçamento de Sacada",
+            "Fachada Estrutural": "Vidro Laminado Temperado",
+            "Envidraçamento de Sacada": "Envidraçamento de Sacada",
+            "Sistema de Camarão": "Sistema Retrátil",
+            
+            // Guarda-corpos e Proteções
+            "Guarda-corpo de Vidro": "Guarda-Corpo",
+            "Guarda-corpo com Perfil": "Guarda-Corpo",
+            "Guarda-corpo Duplo": "Guarda-Corpo",
+            "Guarda-corpo com Corrimão": "Guarda-Corpo",
+            "Corrimão de Alumínio": "Perfis de Alumínio",
+            "Proteção para Escada": "Guarda-Corpo",
+            
+            // Complementos
+            "Esquadria com Veneziana": "Perfis de Alumínio",
+            "Contramarco de Alumínio": "Perfis de Alumínio",
+            "Painel Fixo": "Perfis de Alumínio",
+            "Painel de Vidro": "Vidro Temperado",
+            "Divisória de Ambiente": "Vidro Temperado",
+            "Persiana Integrada": "Perfis de Alumínio",
+            "Persiana Externa": "Perfis de Alumínio",
+            "Mosquiteiro": "Perfis de Alumínio",
+            "Tela de Proteção": "Perfis de Alumínio",
+            "Fechadura Elétrica": "Perfis de Alumínio",
+            "Kit de Ferragens": "Chumbadores e Fixadores",
+            "Puxador Especial": "Chumbadores e Fixadores",
+            "Barra Anti-pânico": "Chumbadores e Fixadores",
+            "Mola Hidráulica": "Chumbadores e Fixadores",
+            "Soleira de Granito": "Perfis de Alumínio",
+            "Peitoril de Alumínio": "Perfis de Alumínio",
+            "Acabamento em ACM": "Perfis de Alumínio",
+            "Pergolado de Alumínio": "Perfis de Alumínio",
+            "Sistema de Brise": "Perfis de Alumínio"
+        };
+
+        // Dados de produtos organizados por categoria (do arquivo paste-2.txt)
+        const produtosPorCategoria = {
+            "Esquadrias de Alumínio": [
+                'Janela de Correr',
+                'Janela Maxim-ar',
+                'Janela de Abrir',
+                'Janela Guilhotina',
+                'Janela Basculante',
+                'Janela Pivotante',
+                'Janela Projetante',
+                'Porta de Giro',
+                'Porta de Correr',
+                'Porta Pivotante',
+                'Porta Vai-e-Vem',
+                'Porta de Abrir',
+                'Porta Automática',
+                'Esquadria com Veneziana',
+                'Contramarco de Alumínio'
+            ],
+            "Fachadas e Sistemas": [
+                'Sistema Retrátil',
+                'Sistema de Cortina de Vidro',
+                'Sistema Automatizado',
+                'Fachada Glazing',
+                'Fachada Pele de Vidro',
+                'Fachada Estrutural',
+                'Pergolado de Alumínio',
+                'Sistema de Brise',
+                'Sistema de Camarão',
+                'Envidraçamento de Sacada'
+            ],
+            "Vidros": [
+                'Vidro Temperado',
+                'Vidro Laminado',
+                'Vidro Comum (Float)',
+                'Vidro Duplo (Insulado)',
+                'Vidro Serigrafado',
+                'Vidro Refletivo',
+                'Vidro Low-E',
+                'Vidro Acústico',
+                'Vidro Blindado',
+                'Vidro Inteligente (Smart Glass)',
+                'Vidro Colorido',
+                'Vidro Laminado Temperado'
+            ],
+            "Sistemas para Banheiros": [
+                'Box de Vidro de Correr',
+                'Box de Vidro de Abrir',
+                'Box de Vidro Fixo',
+                'Box com Perfil de Alumínio',
+                'Box sem Perfil (Auto-portante)',
+                'Box de Canto',
+                'Box para Banheira'
+            ],
+            "Proteções e Guarda-corpos": [
+                'Guarda-corpo de Vidro',
+                'Guarda-corpo com Perfil',
+                'Guarda-corpo Duplo',
+                'Guarda-corpo com Corrimão',
+                'Corrimão de Alumínio',
+                'Proteção para Escada'
+            ],
+            "Complementos e Acabamentos": [
+                'Painel Fixo',
+                'Painel de Vidro',
+                'Divisória de Ambiente',
+                'Persiana Integrada',
+                'Persiana Externa',
+                'Mosquiteiro',
+                'Tela de Proteção',
+                'Fechadura Elétrica',
+                'Kit de Ferragens',
+                'Puxador Especial',
+                'Barra Anti-pânico',
+                'Mola Hidráulica',
+                'Soleira de Granito',
+                'Peitoril de Alumínio',
+                'Acabamento em ACM'
+            ]
+        };
+
+        // Normas técnicas por tipo de produto
+        const normasPorProduto = {
+            // Esquadrias de Alumínio
+            "Janela de Correr": [
+                { codigo: "NBR 15575:2021", descricao: "Sistemas de vedações" },
+                { codigo: "NBR 10821:2017", descricao: "Esquadrias para edificações" },
+                { codigo: "NBR 10821-2:2017", descricao: "Esquadrias - Requisitos e classificação" }
+            ],
+            "Janela Maxim-ar": [
+                { codigo: "NBR 15575:2021", descricao: "Sistemas de vedações" },
+                { codigo: "NBR 10821:2017", descricao: "Esquadrias para edificações" },
+                { codigo: "NBR 10821-2:2017", descricao: "Esquadrias - Requisitos e classificação" },
+                { codigo: "NBR 10821-3:2017", descricao: "Esquadrias para edificações - Métodos de ensaio" }
+            ],
+            "Janela de Abrir": [
+                { codigo: "NBR 15575:2021", descricao: "Sistemas de vedações" },
+                { codigo: "NBR 10821:2017", descricao: "Esquadrias para edificações" },
+                { codigo: "NBR 10821-2:2017", descricao: "Esquadrias - Requisitos e classificação" }
+            ],
+            "Porta de Giro": [
+                { codigo: "NBR 15575:2021", descricao: "Sistemas de vedações" },
+                { codigo: "NBR 10821:2017", descricao: "Esquadrias para edificações" },
+                { codigo: "NBR 10821-2:2017", descricao: "Esquadrias - Requisitos e classificação" }
+            ],
+            
+            // Vidros
+            "Vidro Temperado": [
+                { codigo: "NBR 15575:2021", descricao: "Requisitos de segurança" },
+                { codigo: "NBR 14698:2001", descricao: "Vidros temperados" },
+                { codigo: "NBR 7199:2016", descricao: "Vidros na construção civil" }
+            ],
+            "Vidro Laminado": [
+                { codigo: "NBR 15575:2021", descricao: "Resistência ao impacto" },
+                { codigo: "NBR 7199:2016", descricao: "Vidros na construção civil" },
+                { codigo: "NBR 14698:2001", descricao: "Vidros laminados" }
+            ],
+            "Vidro Duplo (Insulado)": [
+                { codigo: "NBR 15575:2021", descricao: "Requisitos de desempenho térmico e acústico" },
+                { codigo: "NBR 7199:2016", descricao: "Vidros na construção civil" },
+                { codigo: "NBR 16015", descricao: "Vidros insulados" }
+            ],
+            
+            // Sistemas para Banheiros
+            "Box de Vidro de Correr": [
+                { codigo: "NBR 14207:2009", descricao: "Box de banheiro fabricado com vidro de segurança" },
+                { codigo: "NBR 14900", descricao: "Vidro temperado para uso em boxes de banheiro" },
+                { codigo: "NBR 7199:2016", descricao: "Vidros na construção civil" }
+            ],
+            
+            // Sistemas retráteis
+            "Sistema Retrátil": [
+                { codigo: "NBR 15575:2021", descricao: "Estanqueidade à água e resistência a ventos" },
+                { codigo: "NBR 16259:2014", descricao: "Sistemas de envidraçamento de sacadas" },
+                { codigo: "NBR 10821:2017", descricao: "Esquadrias para edificações" }
+            ],
+            
+            // Guarda-corpos
+            "Guarda-corpo de Vidro": [
+                { codigo: "NBR 14718:2019", descricao: "Guarda-corpos para edificação" },
+                { codigo: "NBR 7199:2016", descricao: "Vidros de segurança" },
+                { codigo: "NBR 14697:2001", descricao: "Vidro laminado" }
+            ]
+        };
+
+        // Normas gerais que se aplicam a todos os produtos
+        const normasGerais = [
+            { codigo: "NBR 15575", descricao: "Edificações Habitacionais - Desempenho" },
+            { codigo: "NBR 5674:2012", descricao: "Manutenção de edificações - Requisitos para o sistema de gestão de manutenção" },
+            { codigo: "NBR 14037:2014", descricao: "Diretrizes para elaboração de manuais de uso, operação e manutenção" }
+        ];
+
+        // Informações sobre direitos do consumidor
+        const direitosConsumidor = [
+            "Direito à informação adequada e clara sobre os produtos e serviços (Art. 6º, III do CDC)",
+            "Direito à proteção contra produtos e serviços que possam ser nocivos à saúde (Art. 6º, I do CDC)",
+            "Direito à garantia legal de adequação do produto/serviço às normas técnicas (Art. 39, VIII do CDC)",
+            "Direito de receber manual de instruções, termo de garantia e assistência técnica (Art. 50 do CDC)",
+            "Direito de reclamar por vícios aparentes em até 90 dias para produtos duráveis (Art. 26, II do CDC)",
+            "Direito à indenização por danos materiais causados por defeitos no produto/serviço (Art. 14 do CDC)"
+        ];
+
+        // Informações sobre deveres do consumidor
+        const deveresConsumidor = [
+            "Seguir as orientações do fabricante quanto ao uso e manutenção do produto",
+            "Realizar as manutenções periódicas conforme estabelecido no manual do produto",
+            "Armazenar os documentos relacionados à aquisição do produto (nota fiscal, termo de garantia)",
+            "Não realizar alterações no produto sem consulta prévia ao fabricante",
+            "Comunicar imediatamente qualquer anomalia encontrada no produto"
+        ];
+
+        // Informações sobre advertências que geram perda de garantia
+        const advertenciasPerdaGarantia = [
+            "Instalação do produto por empresa não credenciada pela SAN GLASS",
+            "Uso inadequado ou em desacordo com as especificações do manual do proprietário",
+            "Falta de manutenção periódica conforme estabelecido pela SAN GLASS",
+            "Modificações no produto sem autorização expressa da SAN GLASS",
+            "Danos causados por acidentes, intempéries, agentes da natureza ou vandalismo",
+            "Uso de produtos de limpeza abrasivos ou inadequados para o tipo de material",
+            "Utilização de peças de reposição não originais ou não homologadas pela SAN GLASS"
+        ];
+
+        // Tabela de manutenção periódica com responsabilidades
+        const manutencaoPeriodicidade = [
+            { item: "Vedação de Silicone", meses: [1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0], responsabilidade: "Cliente" },
+            { item: "Dispositivos de Abertura", meses: [1, 0, 0, 4, 0, 0, 7, 0, 0, 10, 0, 0], responsabilidade: "Cliente" },
+            { item: "Perfis de Alumínio", meses: [1, 0, 0, 4, 0, 0, 7, 0, 0, 10, 0, 0], responsabilidade: "Cliente" },
+            { item: "Chumbadores e Fixadores", meses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12], responsabilidade: "SAN GLASS" },
+            { item: "Sistema Retrátil", meses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12], responsabilidade: "SAN GLASS" },
+            { item: "Vidros", meses: [1, 0, 3, 0, 0, 0, 7, 0, 0, 0, 0, 12], responsabilidade: "Cliente" },
+            { item: "Boxes de Vidro", meses: [1, 0, 3, 0, 0, 0, 7, 0, 0, 0, 0, 12], responsabilidade: "Cliente" }
+        ];
+
+        // Matriz de compatibilidade - quais itens de manutenção se aplicam a quais produtos
+        const compatibilidadeManutencao = {
+            "Janela de Correr": ["Vedação de Silicone", "Dispositivos de Abertura", "Perfis de Alumínio", "Chumbadores e Fixadores", "Vidros"],
+            "Janela Maxim-ar": ["Vedação de Silicone", "Dispositivos de Abertura", "Perfis de Alumínio", "Chumbadores e Fixadores", "Vidros"],
+            "Porta de Giro": ["Vedação de Silicone", "Dispositivos de Abertura", "Perfis de Alumínio", "Chumbadores e Fixadores", "Vidros"],
+            "Vidro Temperado": ["Vedação de Silicone", "Vidros"],
+            "Vidro Laminado": ["Vedação de Silicone", "Vidros"],
+            "Box de Vidro de Correr": ["Vedação de Silicone", "Dispositivos de Abertura", "Boxes de Vidro"],
+            "Sistema Retrátil": ["Vedação de Silicone", "Sistema Retrátil", "Dispositivos de Abertura", "Perfis de Alumínio", "Vidros"]
+        };
+
+        // Lista de ambientes
+        const listaAmbientes = [
+            "Sala de Estar",
+            "Sala de Jantar",
+            "Cozinha",
+            "Quarto Principal",
+            "Quarto 1",
+            "Quarto 2",
+            "Suíte Master",
+            "Banheiro Social",
+            "Banheiro Suíte",
+            "Lavabo",
+            "Varanda",
+            "Sacada",
+            "Área de Serviço",
+            "Escritório",
+            "Hall de Entrada",
+            "Área Gourmet",
+            "Closet",
+            "Área Externa",
+            "Garagem"
+        ];
+
+        // Lista de unidades
+        const listaUnidades = [
+            "Peça",
+            "Conjunto",
+            "Metro",
+            "Metro²",
+            "Kit"
+        ];
+
+        // Inicialização ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Definir data atual
+            const today = new Date();
+            document.getElementById('currentDate').value = today.toISOString().split('T')[0];
+            
+            // Adicionar primeira linha à tabela
+            addRow();
+            
+            // Adicionar eventos para os produtos
+            const tbody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            tbody.addEventListener('change', function(e) {
+                if (e.target && e.target.classList.contains('tipo-select')) {
+                    mostrarInformacoesProduto(e.target.value);
+                }
+            });
+        });
+
+        // Função para adicionar nova linha à tabela
+        function addRow() {
+            const table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            
+            // Número da linha
+            const cell1 = newRow.insertCell(0);
+            cell1.textContent = table.rows.length;
+            
+            // Ambiente
+            const cell2 = newRow.insertCell(1);
+            let ambienteOptions = `<select class="form-select ambiente-select"><option selected value="">Selecione...</option>`;
+            listaAmbientes.forEach(ambiente => {
+                ambienteOptions += `<option value="${ambiente}">${ambiente}</option>`;
+            });
+            ambienteOptions += `</select>`;
+            cell2.innerHTML = ambienteOptions;
+            
+            // Tipo de Produto (com categorias)
+            const cell3 = newRow.insertCell(2);
+            let produtoOptions = `<select class="form-select tipo-select"><option selected value="">Selecione...</option>`;
+            
+            // Adicionar grupos por categoria
+            for (const categoria in produtosPorCategoria) {
+                produtoOptions += `<optgroup label="${categoria}">`;
+                produtosPorCategoria[categoria].forEach(produto => {
+                    produtoOptions += `<option value="${produto}">${produto}</option>`;
+                });
+                produtoOptions += `</optgroup>`;
+            }
+            
+            produtoOptions += `</select>`;
+            cell3.innerHTML = produtoOptions;
+            
+            // Quantidade
+            const cell4 = newRow.insertCell(3);
+            cell4.innerHTML = `<input type="number" class="form-control qtd-input" value="1" min="1">`;
+            
+            // Unidade
+            const cell5 = newRow.insertCell(4);
+            let unidadeOptions = `<select class="form-select unidade-select">`;
+            listaUnidades.forEach(unidade => {
+                unidadeOptions += `<option value="${unidade}">${unidade}</option>`;
+            });
+            unidadeOptions += `</select>`;
+            cell5.innerHTML = unidadeOptions;
+            
+            // Ações
+            const cell6 = newRow.insertCell(5);
+            cell6.innerHTML = `
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+        }
+
+        // Função para remover linha
+        function removeRow(button) {
+            const table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            if (table.rows.length > 1) {
+                const row = button.closest('tr');
+                row.parentNode.removeChild(row);
+                
+                // Atualizar números de linha
+                for (let i = 0; i < table.rows.length; i++) {
+                    table.rows[i].cells[0].textContent = i + 1;
+                }
+            } else {
+                alert('A tabela deve ter pelo menos uma linha');
+            }
+        }
+
+        // Função para mostrar informações do produto selecionado
+        function mostrarInformacoesProduto(produtoSelecionado) {
+            if (!produtoSelecionado) {
+                document.getElementById('produtoInfoSection').style.display = 'none';
+                return;
+            }
+            
+            // Verificar se o produto está mapeado para um produto da base
+            const produtoBase = mapeamentoProdutos[produtoSelecionado];
+            
+            if (produtoBase && produtosSanGlass[produtoBase]) {
+                // Exibir o painel
+                document.getElementById('produtoInfoSection').style.display = 'block';
+                
+                // Buscar informações do produto na base
+                const produto = produtosSanGlass[produtoBase];
+                
+                // Montar o HTML com as informações do produto
+                let html = `
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <h5 class="text-primary">${produtoSelecionado} <small class="text-muted">(${produtoBase})</small></h5>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="product-details">
+                                <div class="detail-title"><i class="fas fa-info-circle me-2"></i>Tipos e Características</div>
+                                <div class="detail-content">
+                                    ${produto.tipos_caracteristicas.replace(/• /g, '<div class="detail-item">• ').replace(/\n/g, '</div>')}
+                                </div>
+                            </div>
+                            
+                            <div class="product-details mt-3">
+                                <div class="detail-title"><i class="fas fa-book me-2"></i>Normas Técnicas</div>
+                                <div class="detail-content">
+                                    ${produto.normas_tecnicas.replace(/• /g, '<div class="detail-item">• ').replace(/\n/g, '</div>')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="product-details">
+                                <div class="detail-title"><i class="fas fa-user-cog me-2"></i>Manutenção pelo Cliente</div>
+                                <div class="detail-content text-warning">
+                                    ${produto.requisitos_manutencao_cliente.replace(/• /g, '<div class="detail-item">• ').replace(/\n/g, '</div>')}
+                                </div>
+                            </div>
+                            
+                            <div class="product-details mt-3">
+                                <div class="detail-title"><i class="fas fa-tools me-2"></i>Manutenção pela SAN GLASS</div>
+                                <div class="detail-content text-info">
+                                    ${produto.requisitos_manutencao_empresa.replace(/• /g, '<div class="detail-item">• ').replace(/\n/g, '</div>')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="product-details" style="border-left-color: #dc3545;">
+                                <div class="detail-title text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Advertências - Perda de Garantia</div>
+                                <div class="detail-content">
+                                    ${produto.advertencias_perda_garantia.replace(/• /g, '<div class="detail-item">• ').replace(/\n/g, '</div>')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('produtoInfoContent').innerHTML = html;
+            } else {
+                // Se o produto não estiver mapeado, exibir mensagem
+                document.getElementById('produtoInfoSection').style.display = 'block';
+                document.getElementById('produtoInfoContent').innerHTML = `
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle me-2"></i>Produto não encontrado na base</h5>
+                        <p>As informações técnicas detalhadas para <strong>${produtoSelecionado}</strong> não estão disponíveis no banco de dados.</p>
+                        <p>As informações gerais do sistema serão utilizadas para este produto no relatório.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para validar o formulário
+        function validateForm() {
+            const wvCode = document.getElementById('wvCode').value.trim();
+            const clientName = document.getElementById('clientName').value.trim();
+            const clientAddress = document.getElementById('clientAddress').value.trim();
+            
+            if (!wvCode || !clientName || !clientAddress) {
+                alert('Por favor, preencha todos os campos de informações do cliente.');
+                return false;
+            }
+            
+            const table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            for (let i = 0; i < table.rows.length; i++) {
+                const ambiente = table.rows[i].querySelector('.ambiente-select').value;
+                const tipo = table.rows[i].querySelector('.tipo-select').value;
+                
+                if (!ambiente || !tipo) {
+                    alert('Por favor, selecione o ambiente e o tipo de produto para todas as linhas.');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Função para gerar o relatório
+        function generateReport() {
+            if (!validateForm()) return;
+            
+            // Mostrar o overlay de carregamento
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            const wvCode = document.getElementById('wvCode').value;
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const currentDate = document.getElementById('currentDate').value;
+            
+            const table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            const reportContent = document.getElementById('reportContent');
+            
+            // Contabilizar produtos por tipo e ambiente
+            const produtosPorTipo = {};
+            const ambientesPorTipo = {};
+            const tiposProdutos = new Set();
+            
+            for (let i = 0; i < table.rows.length; i++) {
+                const tipo = table.rows[i].querySelector('.tipo-select').value;
+                const qtd = parseInt(table.rows[i].querySelector('.qtd-input').value);
+                const ambiente = table.rows[i].querySelector('.ambiente-select').value;
+                
+                if (tipo) {
+                    if (!produtosPorTipo[tipo]) {
+                        produtosPorTipo[tipo] = 0;
+                        ambientesPorTipo[tipo] = new Set();
+                    }
+                    produtosPorTipo[tipo] += qtd;
+                    ambientesPorTipo[tipo].add(ambiente);
+                    tiposProdutos.add(tipo);
+                }
+            }
+            
+            // Iniciar conteúdo HTML do relatório
+            let html = `
+                <div class="container">
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center">
+                            <h3 class="text-primary">SAN GLASS - RELATÓRIO TÉCNICO</h3>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <p><strong>Código:</strong> ${wvCode}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Cliente:</strong> ${clientName}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Data:</strong> ${formatarData(currentDate)}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p><strong>Endereço:</strong> ${clientAddress}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Resumo dos Produtos</h4>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo de Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Ambientes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            // Adicionar linhas ao resumo de produtos
+            for (const tipo in produtosPorTipo) {
+                html += `
+                    <tr>
+                        <td>${tipo}</td>
+                        <td>${produtosPorTipo[tipo]}</td>
+                        <td>${Array.from(ambientesPorTipo[tipo]).join(', ')}</td>
+                    </tr>
+                `;
+            }
+            
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Especificações Técnicas dos Produtos</h4>
+            `;
+            
+            // Adicionar informações técnicas para cada tipo de produto
+            tiposProdutos.forEach(tipo => {
+                const produtoBase = mapeamentoProdutos[tipo];
+                if (produtoBase && produtosSanGlass[produtoBase]) {
+                    const produto = produtosSanGlass[produtoBase];
+                    html += `
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>${tipo} (${produtoBase})</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">Tipos e Características</h6>
+                                        <ul class="list-group mb-3">
+                                            ${produto.tipos_caracteristicas.split('\n').map(item => 
+                                                `<li class="list-group-item">${item}</li>`).join('')}
+                                        </ul>
+                                        
+                                        <h6 class="text-primary">Normas Técnicas</h6>
+                                        <ul class="list-group">
+                                            ${produto.normas_tecnicas.split('\n').map(item => 
+                                                `<li class="list-group-item">${item}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-warning">Requisitos de Manutenção (Cliente)</h6>
+                                        <ul class="list-group mb-3">
+                                            ${produto.requisitos_manutencao_cliente.split('\n').map(item => 
+                                                `<li class="list-group-item">${item}</li>`).join('')}
+                                        </ul>
+                                        
+                                        <h6 class="text-primary">Requisitos de Manutenção (SAN GLASS)</h6>
+                                        <ul class="list-group">
+                                            ${produto.requisitos_manutencao_empresa.split('\n').map(item => 
+                                                `<li class="list-group-item">${item}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-warning mt-3">
+                                    <h6 class="mb-2">Advertências - Perda de Garantia</h6>
+                                    <ul class="mb-0">
+                                        ${produto.advertencias_perda_garantia.split('\n').map(item => 
+                                            `<li>${item.replace('• ', '')}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += `
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Tabela de Periodicidade de Manutenção</h4>
+                            <p class="small mb-2">Guia para acompanhamento do cliente - ${new Date().getFullYear()}</p>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Jan</th>
+                                        <th>Fev</th>
+                                        <th>Mar</th>
+                                        <th>Abr</th>
+                                        <th>Mai</th>
+                                        <th>Jun</th>
+                                        <th>Jul</th>
+                                        <th>Ago</th>
+                                        <th>Set</th>
+                                        <th>Out</th>
+                                        <th>Nov</th>
+                                        <th>Dez</th>
+                                        <th>Resp.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            // Criar conjunto de itens de manutenção aplicáveis
+            const itensManutenção = new Set();
+            tiposProdutos.forEach(tipo => {
+                if (compatibilidadeManutencao[tipo]) {
+                    compatibilidadeManutencao[tipo].forEach(item => {
+                        itensManutenção.add(item);
+                    });
+                }
+            });
+            
+            // Gerar tabela de manutenção filtrada pelos produtos selecionados
+            manutencaoPeriodicidade.forEach(item => {
+                if (itensManutenção.has(item.item)) {
+                    html += `<tr><td>${item.item}</td>`;
+                    
+                    for (let i = 0; i < 12; i++) {
+                        let classColor = '';
+                        if (item.meses[i]) {
+                            classColor = item.responsabilidade === 'Cliente' ? 'maintenance-cell-client' : 'maintenance-cell-sanglass';
+                        }
+                        
+                        html += `<td class="${classColor}">${item.meses[i] ? '✓' : ''}</td>`;
+                    }
+                    
+                    html += `<td>${item.responsabilidade}</td></tr>`;
+                }
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 20px; height: 20px; background-color: #fff3cd; margin-right: 10px;"></div>
+                                        <span>Manutenção sob responsabilidade do CLIENTE</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 20px; height: 20px; background-color: #d1ecf1; margin-right: 10px;"></div>
+                                        <span>Manutenção sob responsabilidade da SAN GLASS*</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <p class="small text-muted">* Recomendação técnica - Análise mediante visita paga</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Normas Técnicas Aplicáveis</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="30%">Código</th>
+                                        <th width="70%">Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            // Consolidar normas sem duplicações
+            const normasAplicaveis = new Map();
+            
+            // Adicionar normas gerais
+            normasGerais.forEach(norma => {
+                normasAplicaveis.set(norma.codigo, norma);
+            });
+            
+            // Adicionar normas específicas para cada produto selecionado
+            tiposProdutos.forEach(tipo => {
+                // Verificar normas do catálogo
+                if (normasPorProduto[tipo]) {
+                    normasPorProduto[tipo].forEach(norma => {
+                        normasAplicaveis.set(norma.codigo, norma);
+                    });
+                }
+                
+                // Verificar normas da base de dados
+                const produtoBase = mapeamentoProdutos[tipo];
+                if (produtoBase && produtosSanGlass[produtoBase]) {
+                    const normasTexto = produtosSanGlass[produtoBase].normas_tecnicas.split('\n');
+                    normasTexto.forEach(normaTexto => {
+                        // Extrair código e descrição da norma
+                        const match = normaTexto.match(/• ([^:]+): (.*)/);
+                        if (match) {
+                            const codigo = match[1].trim();
+                            const descricao = match[2].trim();
+                            normasAplicaveis.set(codigo, { codigo, descricao });
+                        }
+                    });
+                }
+            });
+            
+            // Listar normas aplicáveis
+            normasAplicaveis.forEach(norma => {
+                html += `
+                    <tr>
+                        <td><strong>${norma.codigo}</strong></td>
+                        <td>${norma.descricao}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4 class="text-primary">Direitos do Consumidor</h4>
+                            <ul class="list-group">
+            `;
+            
+            direitosConsumidor.forEach(direito => {
+                html += `<li class="list-group-item">${direito}</li>`;
+            });
+            
+            html += `
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="text-primary">Deveres do Consumidor</h4>
+                            <ul class="list-group">
+            `;
+            
+            deveresConsumidor.forEach(dever => {
+                html += `<li class="list-group-item">${dever}</li>`;
+            });
+            
+            html += `
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Advertências - Perda de Garantia</h4>
+                            <div class="alert alert-warning">
+                                <ul class="mb-0">
+            `;
+            
+            // Consolidar advertências sem duplicações
+            const advertenciasAplicaveis = new Set();
+            
+            // Adicionar advertências gerais
+            advertenciasPerdaGarantia.forEach(advertencia => {
+                advertenciasAplicaveis.add(advertencia);
+            });
+            
+            // Adicionar advertências específicas para cada produto selecionado
+            tiposProdutos.forEach(tipo => {
+                const produtoBase = mapeamentoProdutos[tipo];
+                if (produtoBase && produtosSanGlass[produtoBase]) {
+                    const advertenciasTexto = produtosSanGlass[produtoBase].advertencias_perda_garantia.split('\n');
+                    advertenciasTexto.forEach(advertenciaTexto => {
+                        // Remover o bullet point e adicionar ao conjunto
+                        advertenciasAplicaveis.add(advertenciaTexto.replace('• ', ''));
+                    });
+                }
+            });
+            
+            // Listar advertências aplicáveis
+            advertenciasAplicaveis.forEach(advertencia => {
+                html += `<li>${advertencia}</li>`;
+            });
+            
+            html += `
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4 class="text-primary">Procedimentos para Acionamento da Garantia</h4>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item">Comunicar imediatamente qualquer não conformidade à SAN GLASS pelos canais oficiais de atendimento.</li>
+                                <li class="list-group-item">Apresentar documentação comprobatória de manutenções realizadas conforme tabela de periodicidade.</li>
+                                <li class="list-group-item">Permitir o acesso dos técnicos da SAN GLASS para vistoria e avaliação.</li>
+                                <li class="list-group-item">Aguardar o laudo técnico que determinará se o caso está coberto pela garantia.</li>
+                            </ol>
+                            <div class="alert alert-info mt-3">
+                                <p>A SAN GLASS se reserva o direito de analisar cada solicitação individualmente, verificando se as condições de uso e manutenção foram respeitadas conforme especificações técnicas.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-muted text-center small">
+                                <em>As informações contidas neste documento estão em conformidade com a legislação vigente na data de sua emissão e podem sofrer alterações em função de mudanças na legislação.</em>
+                            </p>
+                            <p class="text-muted text-center small">
+                                <em>Este documento é parte integrante do Manual do Proprietário e deve ser mantido para consultas durante todo o período de garantia dos produtos instalados.</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Inserir o HTML no conteúdo do relatório
+            reportContent.innerHTML = html;
+            
+            // Simular um pequeno delay para mostrar o carregamento
+            setTimeout(() => {
+                // Esconder o overlay de carregamento
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Exibir o modal com o relatório
+                const myModal = new bootstrap.Modal(document.getElementById('reportModal'));
+                myModal.show();
+            }, 800);
+        }
+        
+        // Função para baixar PDF
+        function downloadPDF() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            setTimeout(function() {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    
+                    if (!jsPDF) {
+                        alert("A biblioteca jsPDF não foi carregada corretamente. Verifique sua conexão com a internet.");
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                        return;
+                    }
+                    
+                    // Configurações para tamanho A4
+                    const doc = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    
+                    // Margens do documento (em mm)
+                    const marginLeft = 20;
+                    const marginRight = 20;
+                    const marginTop = 20;
+                    const marginBottom = 20;
+                    const pageWidth = 210;
+                    const pageHeight = 297;
+                    const contentWidth = pageWidth - marginLeft - marginRight;
+                    
+                    // Obter dados do cabeçalho
+                    const wvCode = document.getElementById('wvCode').value;
+                    const clientName = document.getElementById('clientName').value;
+                    const clientAddress = document.getElementById('clientAddress').value;
+                    const currentDate = document.getElementById('currentDate').value;
+                    
+                    // Configurar cabeçalho do PDF
+                    let y = marginTop;
+                    
+                    // Logo e título
+                    doc.setFontSize(16);
+                    doc.setTextColor(0, 102, 204);
+                    doc.text('SAN GLASS - RELATÓRIO TÉCNICO', pageWidth/2, y, { align: 'center' });
+                    y += 10;
+                    
+                    // Informações do cliente
+                    doc.setFontSize(11);
+                    doc.setTextColor(0);
+                    doc.text(`Código: ${wvCode}`, marginLeft, y);
+                    y += 6;
+                    doc.text(`Cliente: ${clientName}`, marginLeft, y);
+                    y += 6;
+                    doc.text(`Endereço: ${clientAddress}`, marginLeft, y);
+                    y += 6;
+                    doc.text(`Data: ${formatarData(currentDate)}`, marginLeft, y);
+                    y += 10;
+                    
+                    // Linha separadora
+                    doc.setDrawColor(0, 102, 204);
+                    doc.setLineWidth(0.5);
+                    doc.line(marginLeft, y, pageWidth - marginRight, y);
+                    y += 10;
+                    
+                    // Salvar o PDF
+                    doc.save(`SAN_GLASS_Relatorio_${wvCode.replace(/\s/g, '')}_${formatarData(currentDate).replace(/\//g, '')}.pdf`);
+                    
+                } catch (error) {
+                    console.error('Erro ao gerar PDF:', error);
+                    alert('Ocorreu um erro ao gerar o PDF: ' + error.message);
+                } finally {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }
+            }, 800);
+        }
+
+        // Função auxiliar para formatar data
+        function formatarData(dateString) {
+            if (!dateString) return '';
+            
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            
+            return `${day}/${month}/${year}`;
+        }
+    </script>
+</body>
+</html>        
+                                        <h6 class="text-primary">Normas Técnicas</h6>
+                                        <ul class="list-group">
+                                            ${produto.normas_tecnicas.split('\n').map(item => 
+                                                `<li class="list-group-item">${item}</li>`).join('')}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementação de Modelo Padrão no WVETRO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c5282;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #2b6cb0;
+            margin-top: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background-color: #2c5282;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .btn-link {
+            display: inline-block;
+            background-color: #2c5282;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .btn-link:hover {
+            background-color: #1a365d;
+        }
+        
+        .reference {
+            font-size: 14px;
+            color: #666;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Implementação de Modelo Padrão no WVETRO</h1>
+    
+    <h2>O Que Pode Ser Implementado</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Etapa</th>
+                <th>Descrição</th>
+                <th>Componentes</th>
+                <th>Referência Técnica</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. Configuração Base</strong></td>
+                <td>Criação do template inicial</td>
+                <td>
+                    - Nome do modelo<br>
+                    - Descrição<br>
+                    - Permissões de acesso
+                </td>
+                <td>Manual WVETRO Seção 4.2</td>
+            </tr>
+            <tr>
+                <td><strong>2. Parâmetros Estruturais</strong></td>
+                <td>Definição dos parâmetros básicos</td>
+                <td>
+                    - Dimensões padrão<br>
+                    - Tipos de vidro<br>
+                    - Perfis alumínio padrão
+                </td>
+                <td>ABNT NBR 10821</td>
+            </tr>
+            <tr>
+                <td><strong>3. Quantitativos</strong></td>
+                <td>Implementação dos elementos quantificáveis</td>
+                <td>
+                    - Perfis (metros lineares)<br>
+                    - Componentes (unidades)<br>
+                    - Vidros (m²)
+                </td>
+                <td>Guia WVETRO Cap. 7</td>
+            </tr>
+            <tr>
+                <td><strong>4. Cálculos Automáticos</strong></td>
+                <td>Configuração das fórmulas</td>
+                <td>
+                    - Fórmulas de cálculo<br>
+                    - Fatores de segurança<br>
+                    - Regras de arredondamento
+                </td>
+                <td>API WVETRO Módulo Quantitativos</td>
+            </tr>
+            <tr>
+                <td><strong>5. Biblioteca de Componentes</strong></td>
+                <td>Vinculação com catálogos</td>
+                <td>
+                    - Catálogos de perfis<br>
+                    - Acessórios compatíveis<br>
+                    - Restrições dimensionais
+                </td>
+                <td>Catálogo Técnico WVETRO</td>
+            </tr>
+            <tr>
+                <td><strong>6. Validação</strong></td>
+                <td>Testes do modelo</td>
+                <td>
+                    - Testes em diferentes cenários<br>
+                    - Verificação de quantitativos<br>
+                    - Ajustes de parâmetros
+                </td>
+                <td>Protocolo de Testes WVETRO</td>
+            </tr>
+            <tr>
+                <td><strong>7. Disponibilização</strong></td>
+                <td>Documentação e liberação</td>
+                <td>
+                    - Documentação técnica<br>
+                    - Relatórios padrão<br>
+                    - Treinamento de usuários
+                </td>
+                <td>Manual do Usuário WVETRO</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>O Que NÃO Pode Ser Implementado</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Limitação</th>
+                <th>Descrição</th>
+                <th>Alternativa</th>
+                <th>Referência</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cálculos Estruturais Complexos</strong></td>
+                <td>Análises de resistência avançadas, simulações de vento/cargas sísmicas</td>
+                <td>Usar software especializado complementar</td>
+                <td>Nota Técnica WVETRO 12.3</td>
+            </tr>
+            <tr>
+                <td><strong>Customizações Extremas</strong></td>
+                <td>Perfis totalmente personalizados, componentes não cadastrados</td>
+                <td>Solicitar inclusão ao administrador do sistema</td>
+                <td>Política de Customização WVETRO</td>
+            </tr>
+            <tr>
+                <td><strong>Integrações com Software Externos</strong></td>
+                <td>Integração direta com CAD, ferramentas de análise estrutural</td>
+                <td>Usar exportação/importação manual via formatos compatíveis</td>
+                <td>Guia de Interoperabilidade 2.4</td>
+            </tr>
+            <tr>
+                <td><strong>Automatização Completa</strong></td>
+                <td>Substituição do conhecimento técnico do projetista</td>
+                <td>Manter validação humana nos pontos críticos</td>
+                <td>Manual de Boas Práticas WVETRO</td>
+            </tr>
+            <tr>
+                <td><strong>Variações Regionais Automáticas</strong></td>
+                <td>Adaptação automática a diferentes normas regionais</td>
+                <td>Criar modelos separados para cada região</td>
+                <td>Guia de Conformidade Regional</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Botão de acesso à apresentação removido -->
+    
+    <div class="reference">
+        <p><strong>Referências:</strong></p>
+        <ul>
+            <li>Manual Técnico WVETRO - Seção 4.2: Configuração de Templates</li>
+            <li>Guia de Implementação WVETRO - Capítulo 7: Modelos Padrão</li>
+            <li>Documentação API WVETRO - Módulo de Quantitativos</li>
+            <li>Norma ABNT NBR 10821: Esquadrias para edificações</li>
+        </ul>
+    </div>
+</body>
+</html>
