@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Uso e Preenchimento: Checklist para Especificação de Esquadrias</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tip-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--info-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background-color: #fff5e6;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .reference-box {
+            background-color: #e6f9ef;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .tip-title, .warning-title, .reference-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .tip-title {
+            color: var(--info-color);
+        }
+        
+        .warning-title {
+            color: var(--warning-color);
+        }
+        
+        .reference-title {
+            color: var(--success-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .checklist-item input {
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        
+        .section-nav {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .section-nav h3 {
+            margin-top: 0;
+        }
+        
+        .section-nav ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+        
+        .section-nav li {
+            margin-bottom: 5px;
+        }
+        
+        .section-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .section-nav a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .glossary-term {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .glossary-definition {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+        }
+        
+        /* Configuração para impressão A4 */
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        
+        @media print {
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                font-size: 11pt;
+                background: #fff;
+                color: #000;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                padding: 10mm;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            header {
+                background-color: #fff !important;
+                color: #000 !important;
+                padding: 0 !important;
+                margin-bottom: 15mm !important;
+                box-shadow: none !important;
+                text-align: center !important;
+                border-bottom: 1pt solid #000 !important;
+                padding-bottom: 5mm !important;
+            }
+            
+            h1 {
+                font-size: 18pt !important;
+            }
+            
+            h2 {
+                font-size: 14pt !important;
+                page-break-after: avoid !important;
+                color: #000 !important;
+                border-bottom: 1pt solid #000 !important;
+            }
+            
+            h3 {
+                font-size: 12pt !important;
+                page-break-after: avoid !important;
+                color: #000 !important;
+            }
+            
+            p, li {
+                font-size: 10pt !important;
+            }
+            
+            .container {
+                box-shadow: none !important;
+                border: none !important;
+                margin-bottom: 10mm !important;
+                padding: 0 !important;
+                page-break-inside: avoid !important;
+                background-color: #fff !important;
+            }
+            
+            table {
+                page-break-inside: avoid !important;
+            }
+            
+            tr {
+                page-break-inside: avoid !important;
+            }
+            
+            .tip-box, .warning-box, .reference-box {
+                background-color: #fff !important;
+                border-left: 2pt solid #000 !important;
+                padding: 5mm !important;
+                margin: 5mm 0 !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .tip-title, .warning-title, .reference-title {
+                color: #000 !important;
+            }
+            
+            th {
+                background-color: #fff !important;
+                color: #000 !important;
+                border: 1pt solid #000 !important;
+            }
+            
+            td {
+                border: 1pt solid #000 !important;
+            }
+            
+            tr:nth-child(even) {
+                background-color: #fff !important;
+            }
+            
+            a {
+                text-decoration: none !important;
+                color: #000 !important;
+            }
+            
+            footer {
+                background-color: #fff !important;
+                color: #000 !important;
+                border-top: 1pt solid #000 !important;
+                padding-top: 5mm !important;
+            }
+            
+            /* Controle de quebra de página */
+            #secao1, #secao5, #secao9, #secao13, #boas-praticas, #situacoes {
+                page-break-before: always !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GUIA DE USO E PREENCHIMENTO</h1>
+        <p>Checklist para Especificação de Esquadrias, Guardacorpos e Envidraçamentos</p>
+    </header>
+    
+    <div class="section-nav no-print">
+        <h3>Navegação Rápida</h3>
+        <ul>
+            <li><a href="#introducao">Introdução</a></li>
+            <li><a href="#objetivos">Objetivos do Checklist</a></li>
+            <li><a href="#referencias">Referências Normativas</a></li>
+            <li><a href="#secao1">Seção 1: Tipologia do Sistema</a></li>
+            <li><a href="#secao2">Seção 2: Sentido de Abertura</a></li>
+            <li><a href="#secao3">Seção 3: Dimensões</a></li>
+            <li><a href="#secao4">Seção 4: Material e Acabamento</a></li>
+            <li><a href="#secao5">Seção 5: Vidros</a></li>
+            <li><a href="#secao6">Seção 6: Acessórios</a></li>
+            <li><a href="#secao7">Seção 7: Ventilação</a></li>
+            <li><a href="#secao8">Seção 8: Reforços e Estruturação</a></li>
+            <li><a href="#secao9">Seção 9: Desempenho Técnico</a></li>
+            <li><a href="#secao10">Seção 10: Informações Adicionais</a></li>
+            <li><a href="#secao11">Seção 11: Envoltório</a></li>
+            <li><a href="#secao12">Seção 12: Situação Atual do Local</a></li>
+            <li><a href="#secao13">Seção 13: Fonte das Informações</a></li>
+            <li><a href="#observacoes">Observações e Requisitos Especiais</a></li>
+            <li><a href="#aprovacoes">Aprovações</a></li>
+            <li><a href="#boas-praticas">Boas Práticas para o Vendedor</a></li>
+            <li><a href="#glossario">Glossário Técnico</a></li>
+            <li><a href="#situacoes">Situações Críticas e Soluções</a></li>
+            <li><a href="#checkvendedor">Checklist do Vendedor</a></li>
+        </ul>
+    </div>
+    
+    <div class="container" id="introducao">
+        <h2>INTRODUÇÃO</h2>
+        <p>Este guia foi desenvolvido para auxiliar vendedores na correta utilização do Checklist de Especificação de Esquadrias, Guardacorpos e Envidraçamentos. O documento é uma ferramenta essencial para garantir que todas as especificações técnicas sejam coletadas adequadamente, resultando em orçamentos precisos e produtos que atendam às necessidades do cliente e às normas técnicas aplicáveis.</p>
+    </div>
+    
+    <div class="container" id="objetivos">
+        <h2>OBJETIVOS DO CHECKLIST</h2>
+        <ol>
+            <li><strong>Padronizar o processo de coleta de informações</strong> para especificação de produtos</li>
+            <li><strong>Garantir conformidade</strong> com normas técnicas brasileiras</li>
+            <li><strong>Evitar retrabalhos e erros</strong> de medição ou fabricação</li>
+            <li><strong>Documentar decisões técnicas</strong> aprovadas pelo cliente</li>
+            <li><strong>Servir como instrumento legal</strong> em caso de disputas futuras</li>
+        </ol>
+    </div>
+    
+    <div class="container" id="referencias">
+        <h2>REFERÊNCIAS NORMATIVAS PRINCIPAIS</h2>
+        <p>O checklist baseia-se nas seguintes normas técnicas:</p>
+        <ul>
+            <li><strong>ABNT NBR 10821</strong>: Esquadrias para edificações</li>
+            <li><strong>ABNT NBR 7199</strong>: Vidros na construção civil</li>
+            <li><strong>ABNT NBR 14718</strong>: Guarda-corpos para edificação</li>
+            <li><strong>ABNT NBR 16259</strong>: Sistemas de envidraçamento de sacadas</li>
+            <li><strong>ABNT NBR 15575</strong>: Desempenho de edificações habitacionais</li>
+            <li><strong>ABNT NBR 9050</strong>: Acessibilidade a edificações</li>
+            <li><strong>ABNT NBR 13103</strong>: Instalação de aparelhos a gás</li>
+            <li><strong>ABNT NBR 6123</strong>: Forças devidas ao vento em edificações</li>
+        </ul>
+    </div>
+    
+    <div class="container" id="secao1">
+        <h2>SEÇÃO 1: TIPOLOGIA DO SISTEMA</h2>
+        <p>Esta seção define o tipo básico de sistema a ser especificado.</p>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Marque apenas uma opção principal (Janela, Porta, Guarda-corpo ou Envidraçamento de sacada)</li>
+            <li>Em seguida, marque a subopção específica dentro da categoria escolhida</li>
+            <li>Se necessário, utilize o campo "Outra" para tipologias não listadas</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Janelas</strong>: Maxim-ar é recomendada para ambientes que necessitam de controle de ventilação</li>
+            <li><strong>Portas</strong>: Considere o espaço disponível para abertura ao recomendar o tipo</li>
+            <li><strong>Guarda-corpos</strong>: Vidro temperado é mais estético, mas exige laminação para segurança</li>
+            <li><strong>Envidraçamento de sacada</strong>: Sistema retrátil é mais versátil, mas tem custo superior</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 10821 classifica as esquadrias quanto ao uso e determina seu desempenho mínimo.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique ao cliente as vantagens e desvantagens de cada sistema. Por exemplo, esquadrias maxim-ar oferecem excelente ventilação e proteção contra chuva, mas podem interferir em áreas externas quando abertas.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao2">
+        <h2>SEÇÃO 2: SENTIDO DE ABERTURA</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Identifique o sentido de abertura (para dentro, para fora, lateral direita, lateral esquerda)</li>
+            <li>Considere a interferência com móveis, cortinas e circulação</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Portas de saída de emergência</strong>: Devem abrir no sentido do fluxo de saída</li>
+            <li><strong>Janelas de fachada</strong>: Considere o impacto da chuva e vento na escolha</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 9050 (Acessibilidade) estabelece parâmetros para abertura de portas em rotas acessíveis.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Para portas externas, recomende abertura para fora em regiões de chuvas intensas para evitar infiltrações pelas soleiras.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao3">
+        <h2>SEÇÃO 3: DIMENSÕES</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Registre as dimensões do vão em milímetros (largura x altura)</li>
+            <li>Especifique o número de folhas fixas e móveis</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>Confirme sempre se as medidas informadas são do <strong>vão acabado</strong> ou da <strong>esquadria</strong></li>
+            <li>Verifique a proporção entre folhas fixas e móveis para garantir ventilação adequada</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 15575-4 exige área mínima de ventilação de 8% da área de piso para ambientes de permanência prolongada.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique que a medição final deve ser feita após a execução do vão, e que as dimensões do checklist são preliminares para orçamento.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao4">
+        <h2>SEÇÃO 4: MATERIAL E ACABAMENTO</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Defina o material principal dos perfis</li>
+            <li>Especifique o acabamento e cor</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Alumínio</strong>: Perfis mais finos, leves, com diversos acabamentos</li>
+            <li><strong>PVC</strong>: Melhor isolamento térmico e acústico, limitação de cores</li>
+            <li><strong>Aço</strong>: Alta resistência, ideal para grandes vãos, requer manutenção contra corrosão</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 10821 classifica os perfis quanto à resistência e durabilidade.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Para áreas litorâneas, recomende alumínio com anodização classe A18 (mínimo 18 micra) ou pintura eletrostática com proteção específica para ambientes salinos.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao5">
+        <h2>SEÇÃO 5: VIDROS</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Selecione o tipo de vidro conforme a necessidade de segurança e isolamento</li>
+            <li>Defina a espessura com base nas dimensões do vão</li>
+            <li>Escolha a cor de acordo com o projeto arquitetônico e necessidade de controle solar</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Vidro temperado</strong>: Obrigatório em áreas de risco (NBR 7199)</li>
+            <li><strong>Vidro laminado</strong>: Obrigatório para guarda-corpos (NBR 14718)</li>
+            <li><strong>Espessura mínima</strong>: Deve ser calculada conforme dimensões e pressão de vento</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 7199 determina os tipos de vidros de segurança e suas aplicações.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Vidros de controle solar podem reduzir a carga térmica em até 70%, proporcionando economia significativa em climatização. Vidros acústicos podem atenuar ruídos externos em até 40dB.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao6">
+        <h2>SEÇÃO 6: ACESSÓRIOS</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Especifique fechaduras, puxadores e ferragens</li>
+            <li>Compatibilize o acabamento com os perfis</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>Fechaduras multipontos oferecem maior segurança e melhor vedação</li>
+            <li>Em áreas litorâneas, utilize acessórios em aço inox ou alumínio anodizado</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>Para portas em rotas de fuga, a NBR 11785 exige sistemas antipânico.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Sugerir fechaduras com certificação de segurança para portas externas. Demonstrar a diferença entre fechos simples e multipontos na estanqueidade do sistema.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao7">
+        <h2>SEÇÃO 7: VENTILAÇÃO</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Defina a necessidade de venezianas (fixas ou móveis)</li>
+            <li>Verifique a exigência de ventilação permanente (ambientes com gás)</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Cozinhas e áreas com gás</strong>: Ventilação permanente é obrigatória</li>
+            <li><strong>Dormitórios</strong>: Venezianas móveis permitem controle da ventilação e luz</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 13103 exige ventilação permanente em ambientes com aparelhos a gás. A área deve ser calculada conforme potência dos aparelhos.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique que venezianas integradas às esquadrias oferecem maior segurança, permitindo ventilação com a esquadria fechada.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao8">
+        <h2>SEÇÃO 8: REFORÇOS E ESTRUTURAÇÃO</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Avalie a necessidade de tubos adicionais para reforços</li>
+            <li>Verifique se o cliente deseja cortineiro integrado</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>Vãos grandes (acima de 1,60m) geralmente necessitam de reforços</li>
+            <li>Edifícios altos sofrem maior pressão de vento</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 6123 determina as forças devidas ao vento em edificações.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Sugira cortineiros integrados para melhorar a estética e facilitar a instalação futura de cortinas ou persianas.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao9">
+        <h2>SEÇÃO 9: DESEMPENHO TÉCNICO</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Determine o nível de isolamento acústico necessário</li>
+            <li>Avalie o requisito de isolamento térmico</li>
+            <li>Defina o grau de estanqueidade à água</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Isolamento acústico</strong>: Crítico para imóveis próximos a avenidas, aeroportos</li>
+            <li><strong>Isolamento térmico</strong>: Importante para redução do consumo de energia</li>
+            <li><strong>Estanqueidade</strong>: Fundamental em fachadas expostas à chuva</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 15575 estabelece requisitos mínimos de desempenho térmico e acústico.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique que o investimento em isolamento térmico e acústico pode ser recuperado pela economia em climatização e pelo conforto proporcionado.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao10">
+        <h2>SEÇÃO 10: INFORMAÇÕES ADICIONAIS</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Registre a localização do imóvel (litoral, urbana, rural)</li>
+            <li>Anote a altura do pavimento</li>
+            <li>Identifique a orientação solar da fachada</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Litoral</strong>: Exige tratamentos anticorrosão especiais</li>
+            <li><strong>Altura</strong>: Interfere diretamente na pressão de vento</li>
+            <li><strong>Orientação solar</strong>: Determina necessidade de controle solar</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A NBR 10821 classifica as regiões quanto à agressividade do ambiente.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Para fachadas norte e oeste, destaque a importância de vidros de controle solar e venezianas para reduzir ganho térmico.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao11">
+        <h2>SEÇÃO 11: ENVOLTÓRIO (LOCAL DE FIXAÇÃO)</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Identifique o material de base (alvenaria, concreto, steel frame)</li>
+            <li>Registre a espessura da parede</li>
+            <li>Defina o tipo de contramarco</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>Cada tipo de base exige método específico de fixação</li>
+            <li>A espessura da parede impacta no sistema de fixação</li>
+        </ul>
+        
+        <div class="reference-box">
+            <span class="reference-title">REFERÊNCIA TÉCNICA</span>
+            <p>A instalação deve seguir as recomendações da NBR 10821 para garantir desempenho.</p>
+        </div>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique que contramarcos metálicos oferecem melhor vedação e permitem ajustes na instalação final.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao12">
+        <h2>SEÇÃO 12: SITUAÇÃO ATUAL DO LOCAL</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Registre o estado atual da obra</li>
+            <li>Verifique a situação do vão</li>
+            <li>Identifique possíveis alterações futuras de layout</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li><strong>Obra em andamento</strong>: Programação de medição e fabricação</li>
+            <li><strong>Vãos existentes</strong>: Necessitam medição precisa in loco</li>
+        </ul>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Explique a importância da medição no local após a conclusão dos vãos para evitar problemas de instalação.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="secao13">
+        <h2>SEÇÃO 13: FONTE DAS INFORMAÇÕES</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Registre quem forneceu as informações (cliente, arquiteto, engenheiro)</li>
+            <li>Documente quais documentos técnicos estão disponíveis</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>Decisões técnicas devem ser validadas por profissional habilitado</li>
+            <li>Informações apenas verbais aumentam o risco de erros</li>
+        </ul>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Solicite projetos e memoriais descritivos para garantir especificação precisa.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="observacoes">
+        <h2>OBSERVAÇÕES E REQUISITOS ESPECIAIS</h2>
+        
+        <p>Utilize este campo para registrar qualquer informação adicional relevante:</p>
+        <ul>
+            <li>Necessidades específicas do cliente</li>
+            <li>Condições especiais de acesso</li>
+            <li>Detalhes de integração com outros sistemas</li>
+        </ul>
+    </div>
+    
+    <div class="container" id="aprovacoes">
+        <h2>APROVAÇÕES</h2>
+        
+        <h3>Procedimento:</h3>
+        <ol>
+            <li>Obtenha assinatura do cliente ou representante</li>
+            <li>Inclua assinatura do responsável técnico</li>
+            <li>Registre a data da aprovação</li>
+        </ol>
+        
+        <h3>Pontos críticos:</h3>
+        <ul>
+            <li>O documento assinado tem valor legal e contratual</li>
+            <li>A aprovação deve ser obtida antes da fabricação</li>
+        </ul>
+        
+        <div class="tip-box">
+            <span class="tip-title">DICA DE VENDAS</span>
+            <p>Enfatize que o documento assinado servirá como base para fabricação e que alterações posteriores poderão implicar custos adicionais.</p>
+        </div>
+    </div>
+    
+    <div class="container" id="boas-praticas">
+        <h2>BOAS PRÁTICAS PARA O VENDEDOR</h2>
+        
+        <ol>
+            <li><strong>Faça uma visita técnica</strong> sempre que possível</li>
+            <li><strong>Fotografe o local</strong> para referência futura</li>
+            <li><strong>Verifique interferências</strong> (instalações elétricas, hidráulicas, etc.)</li>
+            <li><strong>Consulte projetos técnicos</strong> antes da visita</li>
+            <li><strong>Leve amostras</strong> de perfis e vidros para facilitar a decisão do cliente</li>
+            <li><strong>Explique as normas</strong> de forma clara e objetiva</li>
+            <li><strong>Documente alterações</strong> solicitadas pelo cliente</li>
+            <li><strong>Confirme informações</strong> com o responsável técnico</li>
+        </ol>
+    </div>
+    
+    <div class="container" id="glossario">
+        <h2>GLOSSÁRIO TÉCNICO PARA VENDEDORES</h2>
+        
+        <div class="glossary-term">Estanqueidade</div>
+        <div class="glossary-definition">Capacidade de impedir a passagem de água</div>
+        
+        <div class="glossary-term">Perfil com ruptura térmica</div>
+        <div class="glossary-definition">Perfil com isolamento interno que reduz transferência de calor</div>
+        
+        <div class="glossary-term">Vidro Low-E</div>
+        <div class="glossary-definition">Vidro com camada de baixa emissividade que reduz transferência de calor</div>
+        
+        <div class="glossary-term">Fator solar</div>
+        <div class="glossary-definition">Percentual de energia solar que atravessa o vidro (quanto menor, melhor o controle térmico)</div>
+        
+        <div class="glossary-term">Atenuação acústica</div>
+        <div class="glossary-definition">Capacidade de reduzir a passagem de som, medida em decibéis (dB)</div>
+        
+        <div class="glossary-term">Anodização</div>
+        <div class="glossary-definition">Tratamento eletroquímico do alumínio que aumenta resistência à corrosão</div>
+        
+        <div class="glossary-term">Contramarco</div>
+        <div class="glossary-definition">Estrutura instalada no vão para posterior fixação da esquadria</div>
+        
+        <div class="glossary-term">Vão luz</div>
+        <div class="glossary-definition">Medida livre do vão acabado</div>
+        
+        <div class="glossary-term">Pressão de vento</div>
+        <div class="glossary-definition">Força exercida pelo vento sobre a esquadria, varia conforme região e altura</div>
+    </div>
+    
+    <div class="container" id="situacoes">
+        <h2>SITUAÇÕES CRÍTICAS E SOLUÇÕES</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Situação</th>
+                    <th>Problema Potencial</th>
+                    <th>Solução Recomendada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cliente em área litorânea</td>
+                    <td>Corrosão acelerada</td>
+                    <td>Especificar alumínio anodizado classe A18 ou superior</td>
+                </tr>
+                <tr>
+                    <td>Apartamento em andar alto</td>
+                    <td>Alta pressão de vento</td>
+                    <td>Utilizar vidros mais espessos e perfis reforçados</td>
+                </tr>
+                <tr>
+                    <td>Dormitório voltado para avenida</td>
+                    <td>Ruído excessivo</td>
+                    <td>Recomendar vidros acústicos (laminados ou duplos)</td>
+                </tr>
+                <tr>
+                    <td>Cozinha com aparelho a gás</td>
+                    <td>Risco de acúmulo de gás</td>
+                    <td>Garantir ventilação permanente conforme NBR 13103</td>
+                </tr>
+                <tr>
+                    <td>Janela com grande exposição solar</td>
+                    <td>Superaquecimento</td>
+                    <td>Especificar vidros de controle solar e venezianas</td>
+                </tr>
+                <tr>
+                    <td>Guarda-corpo em área de uso público</td>
+                    <td>Risco de acidentes</td>
+                    <td>Utilizar vidro laminado e dimensionar conforme NBR 14718</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="container" id="checkvendedor">
+        <h2>CHECKLIST DO VENDEDOR</h2>
+        
+        <h3>Antes da visita:</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check1">
+            <label for="check1">Estudar o projeto do cliente (se disponível)</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check2">
+            <label for="check2">Preparar amostras de perfis e vidros</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check3">
+            <label for="check3">Levar equipamentos de medição</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check4">
+            <label for="check4">Verificar normas específicas para o tipo de edificação</label>
+        </div>
+        
+        <h3>Durante a visita:</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check5">
+            <label for="check5">Fotografar o local e os vãos</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check6">
+            <label for="check6">Medir vãos existentes (se aplicável)</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check7">
+            <label for="check7">Verificar interferências (tubulações, fiação, etc.)</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check8">
+            <label for="check8">Identificar exposição solar e de chuva</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check9">
+            <label for="check9">Verificar necessidades específicas do cliente</label>
+        </div>
+        
+        <h3>Após a visita:</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check10">
+            <label for="check10">Preencher completamente o checklist</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check11">
+            <label for="check11">Revisar especificações técnicas</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check12">
+            <label for="check12">Validar especificações com equipe técnica</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check13">
+            <label for="check13">Preparar orçamento detalhado</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check14">
+            <label for="check14">Obter aprovação formal do cliente</label>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 - Guia de Uso e Preenchimento: Checklist para Especificação de Esquadrias, Guardacorpos e Envidraçamentos</p>
+        <p>Baseado nas normas técnicas da ABNT e boas práticas do setor</p>
+    </footer>
+</body>
+</html>
