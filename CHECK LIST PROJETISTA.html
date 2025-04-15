@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Projeto Executivo de Estrutura Metálica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #000000;
+            background-color: white;
+        }
+        h1 {
+            color: #2c5a9c;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c5a9c;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #d9d9d9;
+        }
+        th {
+            background-color: #2c5a9c;
+            color: white;
+            text-align: left;
+            padding: 12px;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #d9d9d9;
+            color: #000000;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .check-column {
+            width: 80px;
+            text-align: center;
+        }
+        .date-column {
+            width: 120px;
+        }
+        .resp-column {
+            width: 150px;
+        }
+        .checkbox {
+            width: 18px;
+            height: 18px;
+        }
+        .priority-alta {
+            background-color: #e6eeff;
+        }
+        .priority-media {
+            background-color: #f2f2f2;
+        }
+        .priority-baixa {
+            background-color: white;
+        }
+        .section-header {
+            background-color: #2c5a9c;
+            color: white;
+            font-weight: bold;
+        }
+        .subsection-header {
+            background-color: #8c9cb0;
+            color: white;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #000000;
+        }
+        .editable {
+            border: 1px solid #ccc;
+            padding: 5px;
+            min-height: 20px;
+            background-color: #fff;
+        }
+        button {
+            background-color: #2c5a9c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #1c4a8c;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .project-info div {
+            display: flex;
+            align-items: center;
+        }
+        .project-info label {
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 150px;
+        }
+        .project-info input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+        @media print {
+            button, .actions {
+                display: none;
+            }
+            body {
+                font-size: 12px;
+            }
+            .editable {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CHECKLIST DE PROJETO EXECUTIVO DE ESTRUTURA METÁLICA</h1>
+    
+    <div class="project-info">
+        <div>
+            <label for="projeto">Projeto:</label>
+            <input type="text" id="projeto" placeholder="Nome do projeto">
+        </div>
+        <div>
+            <label for="data">Data:</label>
+            <input type="date" id="data">
+        </div>
+        <div>
+            <label for="responsavel">Responsável Técnico:</label>
+            <input type="text" id="responsavel" placeholder="Nome do responsável">
+        </div>
+        <div>
+            <label for="registro">CREA/CAU:</label>
+            <input type="text" id="registro" placeholder="Número de registro">
+        </div>
+    </div>
+
+    <div class="actions">
+        <button id="salvar">SALVAR DADOS</button>
+        <button id="exportar">EXPORTAR PDF</button>
+    </div>
+
+    <!-- ETAPA 0: ANÁLISE PRELIMINAR DO LOCAL -->
+    <h2>ETAPA 0: ANÁLISE PRELIMINAR DO LOCAL</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">0.1 LOGÍSTICA E ACESSO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de acesso para veículos (dimensões e restrições)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Análise de tipo de içamento necessário (manual/guincho/guindaste)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação da capacidade de carga do solo para equipamentos</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Identificação de local para estoque de materiais e ferramentas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de disponibilidade de energia elétrica no local</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Identificação de pontos de água para uso durante a obra</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">0.2 SEGURANÇA E DOCUMENTAÇÃO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de necessidade de autorização de acesso ao local</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Confirmação de permissões e licenças para trabalho no local</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação dos requisitos de segurança do trabalho no local</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Listagem de pessoas presentes no local durante a medição</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-baixa">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de horários permitidos para trabalho e medição</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">0.3 ANÁLISE TÉCNICA PRELIMINAR</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação visual de condições estruturais existentes</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Identificação de possíveis interferências (tubulações, fiação, etc.)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Avaliação preliminar de condições ambientais (chuva, vento, corrosão)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de requisitos específicos do cliente não documentados</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <!-- ETAPA 1: PROCESSO DE MEDIÇÃO -->
+    <h2>ETAPA 1: PROCESSO DE MEDIÇÃO</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">1.1 PREPARAÇÃO PARA MEDIÇÃO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Checagem e calibração de todos os equipamentos de medição</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição dos pontos de referência fixos para medição</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Preparação de formulários padronizados para registro de medidas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">1.2 MEDIÇÃO DO ENVOLTÓRIO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Medição de dimensões principais (comprimento, largura, altura)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de esquadro e ortogonalidade das referências</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Medição de vãos e distâncias entre apoios</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Determinação de níveis e alturas com referência fixa</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Medição de ângulos e inclinações usando esquadro articulado</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">1.3 DOCUMENTAÇÃO E REGISTRO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Registro fotográfico sistemático com referências de escala</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Documentação de todas as medidas em planilha padronizada</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação cruzada de medidas críticas por segunda pessoa</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <!-- ETAPA 2: ELABORAÇÃO DE CROQUIS -->
+    <h2>ETAPA 2: ELABORAÇÃO DE CROQUIS</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">2.1 PADRONIZAÇÃO E PREPARAÇÃO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição de escala padronizada para todos os croquis</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Preparação de modelo padrão com simbologia técnica</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">2.2 DESENVOLVIMENTO DOS CROQUIS</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de planta baixa com todas as cotas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Desenvolvimento de cortes transversais em pontos críticos</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Desenvolvimento de cortes longitudinais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Indicação de pontos de interface com outras estruturas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Esquema de conexões críticas preliminares</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">2.3 VERIFICAÇÃO E FINALIZAÇÃO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de consistência dimensional entre croquis</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Confirmação de todas as medidas críticas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Digitalização e organização dos croquis</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <!-- ETAPA 3: PROJEÇÃO INICIAL (ANTEPROJETO) -->
+    <h2>ETAPA 3: PROJEÇÃO INICIAL (ANTEPROJETO)</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">3.1 DESENVOLVIMENTO CONCEPTUAL</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de planta de locação de pilares e vigas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Pré-dimensionamento de perfis metálicos principais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição da geometria geral da estrutura</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Desenvolvimento de planta de cobertura com caimentos</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">3.2 ELEMENTOS COMPLEMENTARES</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição preliminar de sistemas complementares</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de cortes esquemáticos principais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição preliminar de materiais e acabamentos</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">3.3 VERIFICAÇÃO E COMPATIBILIZAÇÃO</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Análise de compatibilidade com arquitetura existente</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de interferências com sistemas existentes</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de perspectiva para visualização do conjunto</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <!-- ETAPA 4: ANÁLISE ESTRUTURAL -->
+    <h2>ETAPA 4: ANÁLISE ESTRUTURAL</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">4.1 PREPARAÇÃO PARA ANÁLISE</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Preparação do modelo para software de análise estrutural</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Definição completa de carregamentos (permanente, variável, vento)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Estabelecimento de combinações de carregamento</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">4.2 PROCESSAMENTO DA ANÁLISE</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Realização de análise estrutural completa</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Dimensionamento de todos os perfis estruturais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Análise de deformações e verificação dos limites normativos</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Verificação de ligações críticas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">4.3 DOCUMENTAÇÃO DA ANÁLISE</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de memorial de cálculo completo</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Preparação de relatório de dimensionamento</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Documentação de recomendações estruturais especiais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <!-- ETAPA 5: DETALHAMENTO EXECUTIVO -->
+    <h2>ETAPA 5: DETALHAMENTO EXECUTIVO</h2>
+    <table>
+        <tr>
+            <th class="check-column">Status</th>
+            <th>Item de Verificação</th>
+            <th>Observações</th>
+            <th class="resp-column">Responsável</th>
+            <th class="date-column">Data</th>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">5.1 DESENHOS EXECUTIVOS GERAIS</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de plantas estruturais completas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de cortes e elevações estruturais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de todas as ligações parafusadas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de todas as ligações soldadas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">5.2 DETALHES ESPECIAIS</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de apoios e bases de pilares</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de interfaces com vidros (se aplicável)</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento do sistema de drenagem da cobertura</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Detalhamento de interfaces com outros sistemas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="section-header">
+            <td colspan="5">5.3 DOCUMENTAÇÃO COMPLEMENTAR</td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de lista completa de materiais</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de sequência de montagem ilustrada</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-alta">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Elaboração de memorial descritivo completo</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+        <tr class="priority-media">
+            <td class="check-column"><input type="checkbox" class="checkbox"></td>
+            <td>Preparação de especificações técnicas detalhadas</td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><div class="editable" contenteditable="true"></div></td>
+            <td><input type="date" class="date-input"></td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p>Este checklist deve ser utilizado em conjunto com as normas técnicas aplicáveis, em especial a ABNT NBR 8800:2008,<br>ABNT NBR 14762:2010, ABNT NBR 6123:1988 e outras pertinentes ao projeto.</p>
+    </div>
+
+    <script>
+        // Função para salvar os dados no localStorage
+        document.getElementById('salvar').addEventListener('click', function() {
+            const projeto = document.getElementById('projeto').value;
+            const data = document.getElementById('data').value;
+            const responsavel = document.getElementById('responsavel').value;
+            const registro = document.getElementById('registro').value;
+            
+            // Coleta os dados de todas as linhas
+            const checkboxes = Array.from(document.querySelectorAll('.checkbox')).map(cb => cb.checked);
+            const observacoes = Array.from(document.querySelectorAll('.editable')).map(el => el.innerHTML);
+            const responsaveis = Array.from(document.querySelectorAll('.editable')).filter((_, i) => i % 2 === 1).map(el => el.innerHTML);
+            const datas = Array.from(document.querySelectorAll('.date-input')).map(input => input.value);
+            
+            // Salva no localStorage
+            const dadosSalvos = {
+                projeto: projeto,
+                data: data,
+                responsavel: responsavel,
+                registro: registro,
+                checkboxes: checkboxes,
+                observacoes: observacoes.filter((_, i) => i % 2 === 0),
+                responsaveis: responsaveis,
+                datas: datas
+            };
+            
+            localStorage.setItem('checklistEstruturaDados', JSON.stringify(dadosSalvos));
+            alert('Dados salvos com sucesso!');
+        });
+        
+        // Função para carregar os dados do localStorage
+        function carregarDados() {
+            const dadosSalvos = localStorage.getItem('checklistEstruturaDados');
+            if (dadosSalvos) {
+                const dados = JSON.parse(dadosSalvos);
+                
+                document.getElementById('projeto').value = dados.projeto || '';
+                document.getElementById('data').value = dados.data || '';
+                document.getElementById('responsavel').value = dados.responsavel || '';
+                document.getElementById('registro').value = dados.registro || '';
+                
+                // Restaura os checkboxes
+                const checkboxes = document.querySelectorAll('.checkbox');
+                dados.checkboxes.forEach((checked, i) => {
+                    if (i < checkboxes.length) {
+                        checkboxes[i].checked = checked;
+                    }
+                });
+                
+                // Restaura as observações
+                const observacoesElements = Array.from(document.querySelectorAll('.editable')).filter((_, i) => i % 2 === 0);
+                dados.observacoes.forEach((obs, i) => {
+                    if (i < observacoesElements.length) {
+                        observacoesElements[i].innerHTML = obs;
+                    }
+                });
+                
+                // Restaura os responsáveis
+                const responsaveisElements = Array.from(document.querySelectorAll('.editable')).filter((_, i) => i % 2 === 1);
+                dados.responsaveis.forEach((resp, i) => {
+                    if (i < responsaveisElements.length) {
+                        responsaveisElements[i].innerHTML = resp;
+                    }
+                });
+                
+                // Restaura as datas
+                const datasInputs = document.querySelectorAll('.date-input');
+                dados.datas.forEach((data, i) => {
+                    if (i < datasInputs.length) {
+                        datasInputs[i].value = data;
+                    }
+                });
+            }
+        }
+        
+        // Carrega os dados ao iniciar a página
+        window.addEventListener('load', carregarDados);
+        
+        // Função para exportar para PDF
+        document.getElementById('exportar').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>
